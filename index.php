@@ -11,9 +11,9 @@
 </head>
 <body>
   <div class="app">
-    <?php include __DIR__ . '/public/sidebar.php'; ?>
     <?php
       $page = $_GET['page'] ?? 'dashboard';
+      include __DIR__ . '/public/sidebar.php';
       $allowedPages = ['dashboard', 'products', 'employees'];
       if(in_array($page, $allowedPages, true)){
         include __DIR__ . '/public/' . $page . '.php';

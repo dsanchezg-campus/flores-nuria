@@ -19,20 +19,25 @@ html,body{height:100%;margin:0;font-family:Segoe UI, Roboto, 'Helvetica Neue', A
 .sidebar{width:240px;background:var(--sidebar-bg);color:var(--sidebar-text);padding:28px 18px 40px 18px}
 .logo{display:flex;align-items:center;gap:12px;margin-bottom:18px}
 .logo .brand{background:#000;color:#fff;padding:10px 18px;border-radius:24px;font-weight:700}
-.menu-toggle{margin-left:auto;font-size:28px;color:#222}
+.menu-toggle{margin-left:auto;font-size:28px;color:#fff;background:transparent;border:none;cursor:pointer}
 .nav{margin-top:8px}
 .nav h4{font-size:12px;color:#88a0a8;text-transform:uppercase;margin:18px 0 8px}
 .nav ul{list-style:none;padding:0;margin:0}
-.nav li{display:flex;align-items:center;padding:12px;border-radius:6px;margin-bottom:6px;color:var(--sidebar-text);cursor:pointer}
-.nav li:hover{background:rgba(255,255,255,0.03)}
-.nav li.active{background:linear-gradient(90deg,var(--sidebar-accent),#0ea69f);box-shadow:0 2px 0 rgba(0,0,0,0.06)}
+.nav li{margin-bottom:6px}
+.nav li a{display:flex;align-items:center;padding:12px;border-radius:6px;color:var(--sidebar-text);text-decoration:none;transition:background .2s;color:inherit}
+.nav li a:hover{background:rgba(255,255,255,0.03)}
+.nav li.active a{background:linear-gradient(90deg,var(--sidebar-accent),#0ea69f);box-shadow:0 2px 0 rgba(0,0,0,0.06)}
 .nav li .icon{width:36px;height:36px;border-radius:6px;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;margin-right:10px}
 .badge{background:#ff3b30;color:#fff;padding:2px 8px;border-radius:12px;margin-left:auto;font-size:12px}
 
 /* Main content area */
 .main{flex:1;padding:20px}
 .header{display:flex;align-items:center;justify-content:space-between;padding:18px 12px;background:transparent}
+.header .left{display:flex;align-items:center;gap:18px}
+.header .logo{display:flex;align-items:center}
 .breadcrumbs{color:var(--muted);font-size:13px}
+.breadcrumbs ol{display:flex;gap:8px;list-style:none;padding:0;margin:0}
+.breadcrumbs li+li::before{content:'/';color:var(--muted);margin-right:8px}
 .user-circle{width:44px;height:44px;border-radius:50%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
 
 .container{max-width:1100px;margin:12px auto}
@@ -54,6 +59,8 @@ html,body{height:100%;margin:0;font-family:Segoe UI, Roboto, 'Helvetica Neue', A
 .panel{flex:1;background:var(--card-bg);padding:14px;border-radius:6px;box-shadow:0 1px 0 rgba(0,0,0,0.06)}
 .panel h3{margin:0 0 8px 0;font-size:14px}
 .list-item{display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid #f1f2f3}
+.list-item span{flex:1}
+.list-item span:last-child{flex:0}
 .muted{color:var(--muted);font-size:13px}
 
 /* Table productos */
@@ -67,7 +74,8 @@ html,body{height:100%;margin:0;font-family:Segoe UI, Roboto, 'Helvetica Neue', A
 
 /* Form styles */
 .form{background:var(--card-bg);padding:16px;border-radius:6px}
-.form .row{display:flex;gap:12px;margin-bottom:10px}
+.form .row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
+.form .row section{flex:1;min-width:220px}
 .form label{font-size:13px;color:var(--muted);margin-bottom:6px;display:block}
 .form input[type=text],.form input[type=number],.form select,.form textarea{width:100%;padding:8px;border:1px solid #e6e9ea;border-radius:4px}
 .form textarea{min-height:120px}
@@ -75,10 +83,16 @@ html,body{height:100%;margin:0;font-family:Segoe UI, Roboto, 'Helvetica Neue', A
 .btn{display:inline-block;padding:10px 14px;border-radius:6px;border:none;background:var(--accent-1);color:#fff;font-weight:700;cursor:pointer}
 .btn.secondary{background:#ffb400}
 
+/* Footer + toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.table-wrap{overflow-x:auto;margin-bottom:18px}
+.footer{margin-top:20px;padding:14px 16px;border-radius:6px;background:var(--card-bg);color:var(--muted);font-size:13px;text-align:center;box-shadow:0 1px 0 rgba(0,0,0,0.06)}
+
 /* Responsive */
 @media(max-width:900px){
     .sidebar{display:none}
     .container{padding:0 12px}
     .cards{flex-direction:column}
     .panels{flex-direction:column}
+    .toolbar{flex-direction:column}
 }
