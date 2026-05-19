@@ -1,2 +1,2 @@
 <?php
-namespace floristeria;
+namespace Floristeria;
