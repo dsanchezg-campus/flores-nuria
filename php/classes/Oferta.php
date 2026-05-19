@@ -46,4 +46,25 @@ class Oferta
         return $this->idProducto;
     }
 
+    /********************************** METODOS *****************************************/
+    /************************************************************************************/
+
+    public static function getOfertaByIdProducto($idProducto): array{
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT * FROM oferta WHERE idProducto = ?");
+        $stmt->execute([$idProducto]);
+        $ofertas = array();
+        while ($row = $stmt->fetch()) {
+            $ofertas[] = new Oferta(
+                $row->id_oferta,
+                $row->nombre,
+                $row->descuento,
+                $row->fecha_creacion,
+                $row->fecha_actualizacion,
+                $row->fechaFin,
+                $row->id_producto
+            );
+        }
+        return $ofertas;
+    }
 }

@@ -7,8 +7,9 @@ class Ticket
     private $cliente;
     private $fechaCreacion;
     private $totalVenta;
+    private $num_ticket;
     private $BolsaCompra;
-    public function __construct($idTicket, $empleado, $cliente, $fechaCreacion, $totalVenta, $BolsaCompra){
+    public function __construct($idTicket, $empleado, $cliente, $fechaCreacion, $totalVenta, $num_ticket, $BolsaCompra){
         $this->idTicket = $idTicket;
         $this->empleado = $empleado;
         $this->cliente = $cliente;
@@ -39,4 +40,27 @@ class Ticket
         return $this->BolsaCompra;
     }
 
+    /*********************************  METODOS *****************************************/
+    /************************************************************************************/
+
+    public static function getickets(): array
+    {
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT * FROM venta");
+        $stmt->execute();
+        $tickets = array();
+        while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $bolsa_compra = BolsaCompra::getBolsaCompraByIdTicket($row->id_venta);
+            $tickets[] = new Ticket(
+                $row->id_venta,
+                $row->id_empleado,
+                $row->id_cliente,
+                $row->fechaCreacion,
+                $row->precio,
+                $row->num_ticket,
+                $bolsa_compra
+            );
+        }
+        return $tickets;
+    }
 }

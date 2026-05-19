@@ -38,7 +38,18 @@ class Proveedor
     /************************************************************************************/
 
     public function getProveedores($idProveedor): array {
-
-
+        $conn = BD::FloresNuria();
+        $conn = $conn->query("SELECT * FROM proveedor");
+        $proveedores = array();
+        while ($fila = $conn->fetch(PDO::FETCH_OBJ)) {
+            $proveedores[] = new Proveedor(
+                $fila["idProveedor"],
+                $fila["nombre"],
+                $fila["direccion"],
+                $fila["telefono"],
+                $fila["correo"]
+            );
+        }
+        return $proveedores;
     }
 }

@@ -33,4 +33,29 @@ class Empleado{
         return $this->correo;
     }
 
+    /*********************************  METODOS *****************************************/
+    /************************************************************************************/
+
+    public static function InicioSesion($usuario, $password){
+        $db = BD::FloresNuria();
+        // Consulta para obtener usuario por email o nombre, uniendo con tabla rol
+        $stmt = $db->prepare("SELECT * FROM empleado WHERE nombre = ?");
+        $stmt->execute([$usuario]);
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$usuario) {
+            return null; // Usuario no encontrado
+        }
+        // Verificar contraseña hasheada
+        if (password_verify($password, $usuario['password'])) {
+            // Crear sesión con objeto Usuario
+            return new Empleado(
+                $usuario['id_empleado'],
+                $usuario['nombre'],
+                $usuario['puesto'],
+                $usuario['telefono'],
+                $usuario['correo']);
+        } else {
+            return null; // Contraseña incorrecta
+        }
+    }
 }

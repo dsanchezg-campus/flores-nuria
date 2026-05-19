@@ -6,7 +6,7 @@ class BD
     private $user;
     private $pass;
     private $bd;
-    public function __construct($server, $user, $pass, $bd) {
+    private function __construct($server, $user, $pass, $bd) {
         $this->server = $server;
         $this->user = $user;
         $this->pass = $pass;

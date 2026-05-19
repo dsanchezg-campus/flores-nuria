@@ -38,5 +38,25 @@ class Producto
         return $this->oferta;
     }
 
+    /*********************************  METODOS *****************************************/
+    /************************************************************************************/
+
+    public static function getProductos(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT * FROM producto");
+        $stmt->execute();
+        $productos = array();
+        while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $oferta = Oferta::getOfertaByIdProducto($row->id_producto);
+            $productos = new Producto(
+                $row->idProducto,
+                $row->nombre,
+                $row->precio,
+                $row->stock,
+                $oferta
+            );
+        }
+        return $productos;
+    }
 
 }
