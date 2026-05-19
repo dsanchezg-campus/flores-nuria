@@ -1,5 +1,5 @@
 <?php
-namespace Floristeria;
+
 class Ticket
 {
     private $idTicket;

@@ -1,5 +1,5 @@
 <?php
-namespace Floristeria;
+
 class Proveedor
 {
     private $idProveedor;
@@ -34,4 +34,11 @@ class Proveedor
         return $this->correo;
     }
 
+    /*********************************  METODOS *****************************************/
+    /************************************************************************************/
+
+    public function getProveedores($idProveedor): array {
+
+
+    }
 }

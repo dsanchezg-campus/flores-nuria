@@ -1,5 +1,5 @@
 <?php
-namespace Floristeria;
+
 class BolsaCompra
 {
     private $productos;

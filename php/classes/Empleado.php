@@ -1,5 +1,5 @@
 <?php
-namespace Floristeria;
+
 class Empleado{
     private $idEmpleado;
     private $nombre;

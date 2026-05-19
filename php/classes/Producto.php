@@ -1,5 +1,5 @@
 <?php
-namespace Floristeria;
+
 class Producto
 {
     private $idProducto;
