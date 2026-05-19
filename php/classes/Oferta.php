@@ -67,4 +67,25 @@ class Oferta
         }
         return $ofertas;
     }
+
+    public function IngresarOferta(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("INSERT INTO ofertas(nombre, descuento, fechaFin, idProducto) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin, $this->idProducto]);
+        return $conn->lastInsertId();
+    }
+
+    public function ActualizarOferta(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("UPDATE ofertas SET nombre=?, descuento=?, fechaFin=?, idProducto = ? WHERE idOferta = ?");
+        $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin, $this->IdProducto, $this->idOferta]);
+        return $stmt->rowCount() > 0;
+    }
+
+    public function EliminarOferta(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("DELETE FROM ofertas WHERE idOferta = ?");
+        $stmt->execute([$this->idOferta]);
+        return $stmt->rowCount() > 0;
+    }
 }

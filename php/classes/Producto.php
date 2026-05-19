@@ -59,4 +59,48 @@ class Producto
         return $productos;
     }
 
+    public static function getProductoById($idProducto){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT * FROM producto WHERE id_producto = ?");
+        $stmt->execute(array($idProducto));
+        $row = $stmt->fetch(PDO::FETCH_OBJ);
+        $oferta = Oferta::getOfertaByIdProducto($row->id_producto);
+        return new Producto(
+            $row->idProducto,
+            $row->nombre,
+            $row->precio,
+            $row->stock,
+            $oferta
+        );
+    }
+
+    public function ActualizarProducto(): bool{
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("UPDATE producto SET nombre = :nombre, precioBase = :precio, stock = :stock WHERE idProducto = :idProducto");
+        $stmt->bindParam(":nombre", $this->nombre);
+        $stmt->bindParam(":precio", $this->precio);
+        $stmt->bindParam(":stock", $this->stock);
+        $stmt->bindParam(":idProducto", $this->idProducto);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    public function IngresarProducto(): bool{
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("INSERT INTO producto(nombre, precioBase, stock) VALUES (:nombre, :precio, :stock)");
+        $stmt->bindParam(":nombre", $this->nombre);
+        $stmt->bindParam(":precio", $this->precio);
+        $stmt->bindParam(":stock", $this->stock);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    public function EliminarProducto(): bool{
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("DELETE FROM producto WHERE idProducto = :idProducto");
+        $stmt->bindParam(":idProducto", $this->idProducto);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
 }

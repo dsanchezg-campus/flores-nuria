@@ -70,4 +70,44 @@ class Pedido
         }
     }
 
+    public function IngresarPedido(){
+        $conn = BD::FloresNuria();
+        $stmt  = $conn->prepare("INSERT INTO pedidos (estado, id_producto, cantidad, id_proveedor) VALUES (:estado, :id_producto, :cantidad, :id_proveedor)");
+        $stmt->bindParam(":estado", $this->estado);
+        $stmt->bindParam(":id_producto", $this->productos[0]);
+        $stmt->bindParam(":cantidad", $this->productos[1]);
+        $stmt->bindParam(":id_proveedor", $this->idProveedor);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    public function EliminarPedido(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("DELETE FROM pedidos WHERE id_pedido = :id_pedido");
+        $stmt->bindParam(":id_pedido", $this->idPedido);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    public function ModificarEstado(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("UPDATE pedidos SET estado = :estado WHERE id_pedido = :id");
+        $stmt->bindParam(":estado", $this->estado);
+        $stmt->bindParam(":id", $this->idPedido);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    public function ActualizarPedido(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("UPDATE pedidos SET estado = :estado, id_producto = :id_producto, cantidad = :cantidad, id_proveedor = :id_proveedor WHERE id_pedido = :id");
+        $stmt->bindParam(":estado", $this->estado);
+        $stmt->bindParam(":id_producto", $this->productos[0]);
+        $stmt->bindParam(":cantidad", $this->productos[1]);
+        $stmt->bindParam(":id_proveedor", $this->idProveedor);
+        $stmt->bindParam(":id", $this->idPedido);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
 }

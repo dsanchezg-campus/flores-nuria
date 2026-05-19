@@ -23,12 +23,23 @@ class BolsaCompra
         $stmt->execute([$idTicket]);
         $bolsa_compra = new BolsaCompra();
         while ($row = $stmt->fetch(PDO::FETCH_OBJ)){
-            $bolsa_compra->addProducto($row->id_producto);
+            $bolsa_compra->addProducto($row->id_producto, $row->cantidad);
         }
         return $bolsa_compra;
     }
 
-    public function addProducto($id_producto){
-        $this->productos[] = $id_producto;
+    public function addProducto($id_producto, $cantidad){
+        if(($key = array_search($id_producto, $this->productos)) !== false){
+            $this->productos[$key][1] += $cantidad;
+        } else {
+            $this->productos[] = [$id_producto, $cantidad];
+        }
+
+    }
+
+    public function eliminarProducto($producto){
+        if (($key = array_search($producto->getIdProducto(), $this->productos)) !== false) {
+            unset($this->productos[$key]);
+        }
     }
 }

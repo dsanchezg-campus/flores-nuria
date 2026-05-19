@@ -52,4 +52,35 @@ class Proveedor
         }
         return $proveedores;
     }
+
+    public function IngresarProveedor(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("INSERT INTO proveedor(nombre, direccion, telefono, correo) VALUES (:nombre, :direccion, :telefono, :correo)");
+        $stmt->bindParam(":nombre", $this->nombre);
+        $stmt->bindParam(":direccion", $this->direccion);
+        $stmt->bindParam(":telefono", $this->telefono);
+        $stmt->bindParam(":correo", $this->correo);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    public function EliminarProveedor($idProveedor){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("DELETE FROM proveedor WHERE id_proveedor = :id_proveedor");
+        $stmt->bindParam(":id_proveedor", $idProveedor);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    public function ActualizarProveedor($idProveedor, $nombre, $direccion, $telefono, $correo){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("UPDATE proveedor SET nombre = :nombre, direccion = :direccion, telefono = :telefono, correo = :correo WHERE id_proveedor = :id_proveedor");
+        $stmt->bindParam(":nombre", $nombre);
+        $stmt->bindParam(":direccion", $direccion);
+        $stmt->bindParam(":telefono", $telefono);
+        $stmt->bindParam(":correo", $correo);
+        $stmt->bindParam(":id_proveedor", $idProveedor);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
 }

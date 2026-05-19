@@ -15,6 +15,7 @@ class Ticket
         $this->cliente = $cliente;
         $this->fechaCreacion = $fechaCreacion;
         $this->totalVenta = $totalVenta;
+        $this->num_ticket = $num_ticket;
         $this->BolsaCompra = $BolsaCompra;
     }
 
@@ -43,7 +44,7 @@ class Ticket
     /*********************************  METODOS *****************************************/
     /************************************************************************************/
 
-    public static function getickets(): array
+    public static function getTickets(): array
     {
         $conn = BD::FloresNuria();
         $stmt = $conn->prepare("SELECT * FROM venta");
@@ -62,5 +63,35 @@ class Ticket
             );
         }
         return $tickets;
+    }
+
+    public function IngresarTicket(){
+        $conn = BD::FloresNuria();
+        try {
+            $stmt = $conn->prepare("INSERT INTO venta(precio, fecha, num_venta, id_cliente, id_empleado) VALUES (:precio, :fecha, :num_venta, :id_cliente, :id_empleado)");
+            $stmt->bindParam(":precio", $this->totalVenta);
+            $stmt->bindParam(":fecha", $this->fechaCreacion);
+            $stmt->bindParam(":num_venta", $this->num_ticket);
+            $stmt->bindParam(":id_cliente", $this->cliente);
+            $stmt->bindParam(":id_empleado", $this->empleado);
+            $stmt->execute();
+            $id_venta = $conn->lastInsertId();
+            foreach ($this->BolsaCompra as $bolsa) {
+                $stmt = $conn->prepare("INSERT INTO venta_producto(id_venta, id_producto, cantidad) VALUES (:id_venta, :id_producto, :cantidad)");
+                $stmt->bindParam(":id_venta", $id_venta);
+                $stmt->bindParam(":id_producto", $bolsa[0]);
+                $stmt->bindParam(":cantidad", $bolsa[1]);
+                $stmt->execute();
+            }
+            return $stmt->rowCount() > 0;
+        }catch (Exception $e){
+            throw new Exception($e);
+        }
+    }
+
+    public function ActualizarTicket(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("UPDATE venta");
+
     }
 }
