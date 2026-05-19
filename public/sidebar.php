@@ -6,7 +6,7 @@ function sidebarActive(string $slug, string $current): string {
 ?>
 <aside class="sidebar">
   <section class="logo">
-    <span class="brand">LOGO</span>
+    <span class="brand"><img src="img/logo.png"></span>
   </section>
   <nav class="nav" aria-label="navegación principal">
     <h4>Navegación</h4>
