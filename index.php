@@ -14,7 +14,7 @@
     <?php
       $page = $_GET['page'] ?? 'dashboard';
       include __DIR__ . '/public/sidebar.php';
-      $allowedPages = ['dashboard', 'products', 'employees'];
+      $allowedPages = ['dashboard', 'products', 'employees', 'reports', 'payments', 'schedule', 'customers', 'suppliers', 'invoices', 'deliveries', 'budgets'];
       if(in_array($page, $allowedPages, true)){
         include __DIR__ . '/public/' . $page . '.php';
       } else {

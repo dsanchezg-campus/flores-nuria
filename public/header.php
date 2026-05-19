@@ -3,6 +3,14 @@ $pageLabelMap = [
   'dashboard' => 'Dashboard',
   'products' => 'Productos',
   'employees' => 'Empleados',
+  'reports' => 'Informes',
+  'payments' => 'Cobros/Pagos',
+  'schedule' => 'Agenda',
+  'customers' => 'Clientes',
+  'suppliers' => 'Proveedores',
+  'invoices' => 'Facturas emitidas',
+  'deliveries' => 'Albaranes emitidos',
+  'budgets' => 'Presupuestos emitidos'
 ];
 $currentPage = $page ?? ($_GET['page'] ?? 'dashboard');
 $currentPageLabel = $pageLabelMap[$currentPage] ?? 'Dashboard';
