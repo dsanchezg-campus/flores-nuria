@@ -5,7 +5,7 @@ class Pedido
     private $idPedido;
     private $estado;
     private $fecha;
-    private $productos;
+    private $bolsaCompra;
     private $totalPedido;
     private $idProveedor;
 
@@ -17,10 +17,10 @@ class Pedido
      * @param $totalPedido float Coste total del pedido, 2 decimales
      * @param $idProveedor int
      */
-    public function __construct($idPedido,$estado, $productos, $fecha,$totalPedido,$idProveedor){
+    public function __construct($idPedido, $estado, $bolsa_compra, $fecha,$totalPedido,$idProveedor){
         $this->idPedido = $idPedido;
         $this->estado = $estado;
-        $this->productos = [$productos[0], $productos[1]];
+        $this->bolsaCompra = $bolsa_compra;
         $this->fecha = $fecha;
         $this->totalPedido = $totalPedido;
         $this->idProveedor = $idProveedor;
@@ -38,8 +38,8 @@ class Pedido
     public function getFechaCreacion(){
         return $this->fechaCreacion;
     }
-    public function getProductos(){
-        return $this->productos;
+    public function getBolsaCompra(){
+        return $this->bolsaCompra;
     }
     public function getTotalPedido(){
         return $this->totalPedido;
@@ -59,31 +59,34 @@ class Pedido
         $stmt->execute();
         $pedidos = array();
         while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $bolsa_compra = BolsaCompra::getBolsaCompraByIdPedido($row->id_pedido);
             $pedidos[] = new Pedido(
                 $row->id_pedido,
                 $row->estado,
-                [$row->id_producto, $row->cantidad],
+                $bolsa_compra,
                 $row->fechaPedido,
                 $row->total_pedido,
                 $row->id_proveedor
             );
         }
+        return $pedidos;
     }
 
     public function IngresarPedido(){
         $conn = BD::FloresNuria();
-        $stmt  = $conn->prepare("INSERT INTO pedidos (estado, id_producto, cantidad, id_proveedor) VALUES (:estado, :id_producto, :cantidad, :id_proveedor)");
+        $stmt  = $conn->prepare("INSERT INTO pedidos (fecha, estado, id_proveedor) VALUES (:fecha, :estado, :id_proveedor)");
         $stmt->bindParam(":estado", $this->estado);
-        $stmt->bindParam(":id_producto", $this->productos[0]);
-        $stmt->bindParam(":cantidad", $this->productos[1]);
+        $stmt->bindParam(":fecha", $this->fecha);
         $stmt->bindParam(":id_proveedor", $this->idProveedor);
         $stmt->execute();
+        $pedido = $conn->lastInsertId();
+        $this->bolsaCompra->IngresarPedidoProductos($this);
         return $stmt->rowCount() > 0;
     }
 
     public function EliminarPedido(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("DELETE FROM pedidos WHERE id_pedido = :id_pedido");
+        $stmt = $conn->prepare("DELETE FROM pedidos AND pedido_productos WHERE id_pedido = :id_pedido");
         $stmt->bindParam(":id_pedido", $this->idPedido);
         $stmt->execute();
         return $stmt->rowCount() > 0;
@@ -100,13 +103,13 @@ class Pedido
 
     public function ActualizarPedido(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("UPDATE pedidos SET estado = :estado, id_producto = :id_producto, cantidad = :cantidad, id_proveedor = :id_proveedor WHERE id_pedido = :id");
+        $stmt = $conn->prepare("UPDATE pedidos SET fecha = :fecha, estado = :estado, id_proveedor = :id_proveedor WHERE id_pedido = :id");
         $stmt->bindParam(":estado", $this->estado);
-        $stmt->bindParam(":id_producto", $this->productos[0]);
-        $stmt->bindParam(":cantidad", $this->productos[1]);
+        $stmt->bindParam(":fecha", $this->fecha);
         $stmt->bindParam(":id_proveedor", $this->idProveedor);
         $stmt->bindParam(":id", $this->idPedido);
         $stmt->execute();
+        $this->bolsaCompra->IngresarPedidoProductos($this);
         return $stmt->rowCount() > 0;
     }
 

@@ -75,23 +75,38 @@ class Ticket
             $stmt->bindParam(":id_cliente", $this->cliente);
             $stmt->bindParam(":id_empleado", $this->empleado);
             $stmt->execute();
-            $id_venta = $conn->lastInsertId();
-            foreach ($this->BolsaCompra as $bolsa) {
-                $stmt = $conn->prepare("INSERT INTO venta_producto(id_venta, id_producto, cantidad) VALUES (:id_venta, :id_producto, :cantidad)");
-                $stmt->bindParam(":id_venta", $id_venta);
-                $stmt->bindParam(":id_producto", $bolsa[0]);
-                $stmt->bindParam(":cantidad", $bolsa[1]);
-                $stmt->execute();
-            }
+            $this->BolsaCompra->IngresarVentaProductos($this);
             return $stmt->rowCount() > 0;
         }catch (Exception $e){
             throw new Exception($e);
         }
     }
 
-    public function ActualizarTicket(){
+    public function ActualizarTicket(): bool{
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("UPDATE venta");
+        try {
+            if ($this->BolsaCompra->IngresarVentaProductos($this)) {
+                $stmt = $conn->prepare("UPDATE venta SET precio = :precio, fecha = :fecha, num_venta = :num_venta, id_cliente = :id_cliente WHERE id_venta = :id_venta");
+                $stmt->bindParam(":precio", $this->totalVenta);
+                $stmt->bindParam(":fecha", $this->fechaCreacion);
+                $stmt->bindParam(":num_venta", $this->num_ticket);
+                $stmt->bindParam(":id_cliente", $this->cliente);
+                $stmt->bindParam(":id_venta", $this->idTicket);
+                $stmt->execute();
+                return $stmt->rowCount() > 0;
+            } else{
+                return false;
+            }
+        } catch (Exception $e){
+            throw new Exception($e);
+        }
+    }
 
+    public function EliminarTicket(): bool{
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("DELETE FROM venta AND venta_producto WHERE id_venta = :id_venta");
+        $stmt->bindParam(":id_venta", $this->idTicket);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
     }
 }
