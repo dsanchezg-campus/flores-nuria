@@ -91,12 +91,11 @@ function viewOrder(id, items) {
     list.innerHTML = '';
     
     if (items.length === 0) {
-        list.innerHTML = '<li style="padding: 8px 0; color: #666;">No hay productos en este pedido.</li>';
+        list.innerHTML = '<li class="order-item text-muted">No hay productos en este pedido.</li>';
     } else {
         items.forEach(i => {
             const li = document.createElement('li');
-            li.style.padding = '8px 0';
-            li.style.borderBottom = '1px solid #ddd';
+            li.className = 'order-item';
             li.innerHTML = '<strong>' + i.cantidad + 'x</strong> ' + i.nombre;
             list.appendChild(li);
         });
@@ -180,18 +179,12 @@ function addProductToOffer(type, idProd = null, nameProd = null) {
     if (emptyMsg) emptyMsg.style.display = 'none';
 
     const div = document.createElement('div');
-    div.style.display = 'flex';
-    div.style.justifyContent = 'space-between';
-    div.style.alignItems = 'center';
-    div.style.padding = '4px 8px';
-    div.style.borderBottom = '1px solid #eee';
-    div.style.backgroundColor = '#fff';
-    div.style.marginBottom = '2px';
+    div.className = 'offer-product-item';
     
     div.innerHTML = `
-        <span style="font-size:0.9em;">${name}</span>
+        <span class="text-md">${name}</span>
         <input type="hidden" name="productos[]" value="${id}">
-        <button type="button" class="btn secondary btn-sm" onclick="this.parentElement.remove(); checkEmptyOfferProducts('${type}')" style="padding:2px 6px; font-weight:bold; color:red; border:none; background:transparent;">X</button>
+        <button type="button" class="btn secondary btn-sm btn-close-sm" onclick="this.parentElement.remove(); checkEmptyOfferProducts('${type}')">X</button>
     `;
     container.appendChild(div);
 }
@@ -215,7 +208,7 @@ function editOffer(id, nombre, descuento, productosIds, fechaFin) {
     document.getElementById('edit-descuento-oferta').value = descuento;
     
     const container = document.getElementById('container-edit-prod');
-    container.innerHTML = '<p id="empty-edit-prod" style="color:#888; font-size:0.9em; margin:0;">Añade productos usando el botón +</p>';
+    container.innerHTML = '<p id="empty-edit-prod" class="text-muted text-md m-0">Añade productos usando el botón +</p>';
     
     let idsStr = Array.isArray(productosIds) ? productosIds.map(String) : [String(productosIds)];
     if(typeof productosIds === 'string' && productosIds.includes(',')) idsStr = productosIds.split(',');

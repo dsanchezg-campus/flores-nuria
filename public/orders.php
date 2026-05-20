@@ -5,14 +5,14 @@
   ?>
   <section class="container">
     <?php echo $msg; ?>
-    <section class="toolbar" style="margin-bottom:12px;display:flex;gap:8px">
-      <form method="GET" action="index.php" style="display:flex;gap:8px;margin:0;">
+    <section class="toolbar d-flex gap-2 mb-3">
+      <form method="GET" action="index.php" class="d-flex gap-2 m-0">
         <input type="hidden" name="page" value="orders">
-        <input type="text" name="search" placeholder="Buscar por estado o proveedor..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" style="padding:6px 12px; border:1px solid #ccc; border-radius:4px; outline:none;">
+        <input type="text" name="search" placeholder="Buscar por estado o proveedor..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" class="px-3-py-1 border-base rounded-sm outline-none">
         <button type="submit" class="btn">Buscar</button>
       </form>
-      <a href="index.php?page=orders" class="btn" style="background:var(--accent-3); text-decoration:none; color:inherit; display:flex; align-items:center; padding: 0 16px;">Mostrar Todo</a>
-      <a href="index.php?page=create_order" class="btn secondary" style="text-decoration:none; display:flex; align-items:center; padding: 0 16px;">Realizar pedido</a>
+      <a href="index.php?page=orders" class="btn pill green text-decoration-none d-flex align-center px-3">Mostrar Todo</a>
+      <a href="index.php?page=create_order" class="btn secondary text-decoration-none d-flex align-center px-3">Realizar pedido</a>
     </section>
 
     <section class="table-wrap">
@@ -68,9 +68,9 @@
             
             // Colores por estado
             $estadoStr = $estado;
-            if (strtolower($estado) === 'recibido') $estadoStr = "<span style='color:green;font-weight:bold;'>$estado</span>";
-            if (strtolower($estado) === 'cancelado') $estadoStr = "<span style='color:red;font-weight:bold;'>$estado</span>";
-            if (strtolower($estado) === 'pendiente') $estadoStr = "<span style='color:orange;font-weight:bold;'>$estado</span>";
+            if (strtolower($estado) === 'recibido') $estadoStr = "<span class='text-success fw-bold'>$estado</span>";
+            if (strtolower($estado) === 'cancelado') $estadoStr = "<span class='text-danger fw-bold'>$estado</span>";
+            if (strtolower($estado) === 'pendiente') $estadoStr = "<span class='text-warning fw-bold'>$estado</span>";
             
             echo "<tr>";
             echo "<td>#{$id}</td>";
@@ -78,13 +78,13 @@
             echo "<td>{$fecha}</td>";
             echo "<td>{$estadoStr}</td>";
             echo "<td>{$numProds} tipos</td>";
-            echo "<td style='display:flex;gap:4px;'>
-                    <button type=\"button\" class=\"btn secondary\" style='padding:2px 8px;font-size:12px;' onclick='changeStatus({$id}, \"Pendiente\")'>Pendiente</button>
-                    <button type=\"button\" class=\"btn\" style='padding:2px 8px;font-size:12px;background:green;' onclick='changeStatus({$id}, \"Recibido\")'>Recibido</button>
-                    <button type=\"button\" class=\"btn\" style='padding:2px 8px;font-size:12px;background:red;' onclick='changeStatus({$id}, \"Cancelado\")'>Cancelado</button>
+            echo "<td class='d-flex gap-1'>
+                    <button type=\"button\" class=\"btn secondary btn-sm\" onclick='changeStatus({$id}, \"Pendiente\")'>Pendiente</button>
+                    <button type=\"button\" class=\"btn btn-sm btn-success\" onclick='changeStatus({$id}, \"Recibido\")'>Recibido</button>
+                    <button type=\"button\" class=\"btn btn-sm btn-danger\" onclick='changeStatus({$id}, \"Cancelado\")'>Cancelado</button>
                   </td>";
             echo "<td class=\"actions\">
-                    <button type=\"button\" class=\"btn-view\" style='background:none;border:none;cursor:pointer;font-size:18px;' onclick='viewOrder({$id}, {$jsOrderItems})'>👁</button>
+                    <button type=\"button\" class=\"btn-view\" onclick='viewOrder({$id}, {$jsOrderItems})'>👁</button>
                     <button type=\"button\" class=\"btn-edit\" onclick='editOrder({$id}, {$proveedorId}, {$jsFecha}, {$jsEstado})'>✎</button>
                     <button type=\"button\" class=\"btn-delete\" onclick='deleteOrder({$id})'>🗑</button>
                   </td>";
@@ -92,37 +92,36 @@
           }
           
           if (empty($pedidos)) {
-              echo "<tr><td colspan='7' style='text-align:center;'>No hay pedidos registrados.</td></tr>";
+              echo "<tr><td colspan='7' class='text-center'>No hay pedidos registrados.</td></tr>";
           }
           ?>
         </tbody>
       </table>
     </section>
 
-    <h3 id="view-title" style="margin-top:18px; display:none;">Detalles del Pedido #<span id="view-id"></span></h3>
-    <section id="view-panel" class="form" style="display:none; background:#f9f9f9; padding: 16px; border-radius: 8px;">
-        <h4 style="margin-top:0; border-bottom:1px solid #ccc; padding-bottom:8px;">Productos incluidos</h4>
-        <ul id="view-items-list" style="list-style:none; padding:0; margin:0;">
-        </ul>
-        <button type="button" class="btn secondary" onclick="closeViewPanel()" style="margin-top:16px;">Cerrar detalles</button>
+    <h3 id="view-title" class="mt-5 d-none">Detalles del Pedido #<span id="view-id"></span></h3>
+    <section id="view-panel" class="form d-none bg-f9 p-4 rounded-md">
+        <h4 class="m-0 border-bottom-gray pb-2">Productos incluidos</h4>
+        <ul id="view-items-list" class="list-style-none p-0 m-0"></ul>
+        <button type="button" class="btn secondary mt-3" onclick="closeViewPanel()">Cerrar detalles</button>
     </section>
 
-    <h3 id="edit-title" style="margin-top:18px; display:none;">Editar Pedido</h3>
+    <h3 id="edit-title" class="mt-5 d-none">Editar Pedido</h3>
     <section class="form">
-      <form id="form-edit-order" method="POST" action="php/actions/order_actions.php" style="display:none;">
+      <form id="form-edit-order" method="POST" action="php/actions/order_actions.php" class="d-none">
         <input type="hidden" name="action" value="update_order">
         <input type="hidden" name="idPedido" id="edit-id">
         
         <section class="row">
-          <section style="flex:1">
+          <section class="flex-1">
             <label>ID Proveedor *</label>
             <input type="number" name="id_proveedor" id="edit-proveedor" required>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Fecha</label>
             <input type="date" name="fecha" id="edit-fecha">
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Estado</label>
             <select name="estado" id="edit-estado">
               <option value="Pendiente">Pendiente</option>
@@ -132,8 +131,8 @@
           </section>
         </section>
 
-        <section class="row" style="margin-top: 16px;">
-          <button type="submit" class="btn" style="background:var(--accent-2);">Guardar cambios</button>
+        <section class="row mt-4">
+          <button type="submit" class="btn pill orange">Guardar cambios</button>
           <button type="button" class="btn secondary" onclick="closeEditForm()">Cancelar</button>
         </section>
       </form>
@@ -143,12 +142,12 @@
   </section>
 </main>
 
-<form id="form-delete-order" method="POST" action="php/actions/order_actions.php" style="display:none;">
+<form id="form-delete-order" method="POST" action="php/actions/order_actions.php" class="d-none">
     <input type="hidden" name="action" value="delete_order">
     <input type="hidden" name="idPedido" id="delete-id">
 </form>
 
-<form id="form-status-order" method="POST" action="php/actions/order_actions.php" style="display:none;">
+<form id="form-status-order" method="POST" action="php/actions/order_actions.php" class="d-none">
     <input type="hidden" name="action" value="change_status">
     <input type="hidden" name="idPedido" id="status-id">
     <input type="hidden" name="estado" id="status-val">

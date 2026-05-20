@@ -10,18 +10,18 @@
     $productosList = Producto::getProductos();
     ?>
 
-    <section class="toolbar" style="margin-bottom:12px;display:flex;gap:8px">
-      <a href="index.php?page=orders" class="btn secondary" style="text-decoration:none; display:flex; align-items:center; padding: 0 16px;">&laquo; Volver a Pedidos</a>
+    <section class="toolbar d-flex gap-2 mb-3">
+      <a href="index.php?page=orders" class="btn secondary text-decoration-none d-flex align-center px-3">&laquo; Volver a Pedidos</a>
     </section>
 
-    <h3 style="margin-top:18px; margin-bottom:12px;">Realizar Nuevo Pedido</h3>
+    <h3 class="mt-5 mb-3">Realizar Nuevo Pedido</h3>
     <?php echo $mensaje; ?>
     
     <section class="form">
       <form method="POST" action="php/actions/order_actions.php">
         <input type="hidden" name="action" value="create_order">
         <section class="row">
-          <section style="flex:2">
+          <section class="flex-2">
             <label>Proveedor *</label>
             <select name="id_proveedor" required>
                 <option value="">-- Seleccionar Proveedor --</option>
@@ -32,11 +32,11 @@
                 <?php endforeach; ?>
             </select>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Fecha del Pedido</label>
             <input type="date" name="fecha" value="<?= date('Y-m-d') ?>" required>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Estado</label>
             <select name="estado">
                 <option value="Pendiente" selected>Pendiente</option>
@@ -46,11 +46,11 @@
           </section>
         </section>
 
-        <h4 style="margin-top: 24px; margin-bottom: 12px; border-bottom: 1px solid #ddd; padding-bottom: 8px;">Añadir Productos al Pedido</h4>
+        <h4 class="mt-4 mb-3 border-bottom-light pb-2">Añadir Productos al Pedido</h4>
         <section id="productos-container">
             <!-- Fila de producto base -->
-            <section class="row producto-row" style="margin-bottom: 8px;">
-              <section style="flex:3">
+            <section class="row producto-row mb-2">
+              <section class="flex-2">
                 <select name="productos[]">
                     <option value="">-- Seleccionar Producto --</option>
                     <?php foreach($productosList as $prod): ?>
@@ -60,20 +60,20 @@
                     <?php endforeach; ?>
                 </select>
               </section>
-              <section style="flex:1">
+              <section class="flex-1">
                 <input type="number" name="cantidades[]" placeholder="Cantidad" min="1">
               </section>
-              <section style="flex:0; align-self: center;">
+              <section class="flex-0 align-self-center">
                 <button type="button" class="btn secondary" onclick="this.parentElement.parentElement.remove()">X</button>
               </section>
             </section>
         </section>
         
-        <section style="margin-top: 8px;">
+        <section class="mt-2">
             <button type="button" class="btn secondary" onclick="addProductoRow()">+ Añadir otro producto</button>
         </section>
 
-        <section class="row" style="margin-top: 24px;">
+        <section class="row mt-4">
           <button type="submit" class="btn">Guardar Pedido</button>
         </section>
       </form>

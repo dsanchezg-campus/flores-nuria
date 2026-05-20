@@ -5,30 +5,33 @@
   ?>
   <section class="container">
     <?php echo $msg; ?>
-    <section class="toolbar" style="margin-bottom:12px;display:flex;gap:8px">
-      <a href="index.php?page=products" class="btn secondary" style="text-decoration:none; display:flex; align-items:center; padding: 0 16px;">Ir a Productos</a>
-      <button class="btn" onclick="document.getElementById('form-create-offer').style.display='block'; document.getElementById('form-edit-offer').style.display='none';" style="background:var(--accent-3); display:flex; align-items:center; padding: 0 16px;">Nueva Oferta</button>
+    <section class="toolbar d-flex gap-2 mb-3">
+      <form method="GET" action="index.php" class="d-flex gap-2 m-0">
+        <input type="hidden" name="page" value="offers">
+        <input type="text" name="search" placeholder="Buscar oferta..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" class="px-3-py-1 border-base rounded-sm outline-none">
+        <button type="submit" class="btn">Buscar</button>
+      </form>
+      <a href="index.php?page=offers" class="btn pill green text-decoration-none d-flex align-center px-3">Mostrar Todo</a>
+      <button type="button" class="btn secondary d-flex align-center px-3" onclick="document.getElementById('form-create-offer').style.display='block'; document.getElementById('form-edit-offer').style.display='none';">Nueva oferta</button>
     </section>
 
     <!-- FORMULARIO CREAR OFERTA -->
-    <section class="form" id="form-create-offer" style="display:none; margin-bottom:20px;">
-      <h3 style="margin-bottom:12px;">Crear Nueva Oferta</h3>
-      <form method="POST" action="php/actions/offer_actions.php">
+    <form id="form-create-offer" method="POST" action="php/actions/offer_actions.php" class="form mb-3 d-none">
         <input type="hidden" name="action" value="create_offer">
-        <section class="row">
-          <section style="flex:2">
+        <div class="row">
+          <section class="flex-1">
             <label>Nombre de la Oferta *</label>
             <input type="text" name="nombre" placeholder="Ej: Black Friday" required>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Descuento (%) *</label>
             <input type="number" step="0.01" name="descuento" placeholder="Ej: 15" required>
           </section>
-          <section style="flex:2">
+          <section class="flex-1">
             <label>Productos *</label>
-            <div style="display:flex; gap:8px; margin-bottom:8px; align-items:center;">
-                <input type="text" id="search-create-prod" placeholder="Buscar producto..." onkeyup="filterProducts('create')" style="flex:1; padding:6px; border:1px solid #ccc; border-radius:4px;">
-                <select id="select-create-prod" style="flex:2; padding:6px; border:1px solid #ccc; border-radius:4px;">
+            <div class="d-flex gap-2 mb-2 align-center">
+                <input type="text" id="search-create-prod" placeholder="Buscar producto..." onkeyup="filterProducts('create')" class="flex-1 px-3-py-1 border-base rounded-sm">
+                <select id="select-create-prod" class="flex-2 px-3-py-1 border-base rounded-sm">
                   <?php
                     $productos = Producto::getProductos();
                     foreach($productos as $p){
@@ -36,69 +39,67 @@
                     }
                   ?>
                 </select>
-                <button type="button" class="btn primary" onclick="addProductToOffer('create')" style="padding:6px 12px; font-weight:bold; border-radius:4px; margin:0;">+</button>
+                <button type="button" class="btn primary px-3-py-1 fw-bold rounded-sm m-0" onclick="addProductToOffer('create')">+</button>
             </div>
-            <div id="container-create-prod" style="border:1px solid #ddd; border-radius:4px; padding:8px; min-height:80px; max-height:150px; overflow-y:auto; background:#fafafa;">
+            <div id="container-create-prod" class="border-light rounded-sm p-2 bg-light min-h-80 max-h-150 overflow-y-auto">
                 <!-- Elementos añadidos aparecerán aquí -->
-                <p id="empty-create-prod" style="color:#888; font-size:0.9em; margin:0;">Añade productos usando el botón +</p>
+                <p id="empty-create-prod" class="text-muted text-md m-0">Añade productos usando el botón +</p>
             </div>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Fecha Fin (Opcional)</label>
             <input type="date" name="fechaFin">
           </section>
-        </section>
-        <section class="row" style="margin-top: 16px;">
-          <button type="submit" class="btn" style="background:var(--accent-2);">Guardar Oferta</button>
-          <button type="button" class="btn secondary" onclick="document.getElementById('form-create-offer').style.display='none'">Cancelar</button>
-        </section>
-      </form>
-    </section>
+        </div>
+        <div class="row mt-4">
+          <button type="submit" class="btn pill green">Crear Oferta</button>
+          <button type="button" class="btn btn-gray" onclick="document.getElementById('form-create-offer').style.display='none';">Cancelar</button>
+        </div>
+    </form>
 
     <!-- FORMULARIO EDITAR OFERTA -->
-    <section class="form" id="form-edit-offer" style="display:none; margin-bottom:20px;">
-      <h3 style="margin-bottom:12px;">Editar Oferta</h3>
-      <form method="POST" action="php/actions/offer_actions.php">
+    <h3 id="edit-title" class="mt-5 d-none">Editar oferta</h3>
+    <form id="form-edit-offer" method="POST" action="php/actions/offer_actions.php" class="form mb-3 d-none">
         <input type="hidden" name="action" value="update_offer">
         <input type="hidden" name="idOferta" id="edit-id-oferta">
-        <section class="row">
-          <section style="flex:2">
-            <label>Nombre de la Oferta *</label>
+        
+        <div class="row">
+          <section class="flex-1">
+            <label>Nombre Oferta *</label>
             <input type="text" name="nombre" id="edit-nombre-oferta" required>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Descuento (%) *</label>
             <input type="number" step="0.01" name="descuento" id="edit-descuento-oferta" required>
           </section>
-          <section style="flex:2">
+          <section class="flex-2">
             <label>Productos *</label>
-            <div style="display:flex; gap:8px; margin-bottom:8px; align-items:center;">
-                <input type="text" id="search-edit-prod" placeholder="Buscar producto..." onkeyup="filterProducts('edit')" style="flex:1; padding:6px; border:1px solid #ccc; border-radius:4px;">
-                <select id="select-edit-prod" style="flex:2; padding:6px; border:1px solid #ccc; border-radius:4px;">
+            <div class="d-flex gap-2 mb-2 align-center">
+                <input type="text" id="search-edit-prod" placeholder="Buscar producto..." onkeyup="filterProducts('edit')" class="flex-1 px-3-py-1 border-base rounded-sm">
+                <select id="select-edit-prod" class="flex-2 px-3-py-1 border-base rounded-sm">
                   <?php
                     foreach($productos as $p){
                         echo "<option value='{$p->getIdProducto()}'>{$p->getNombre()} (" . number_format($p->getPrecioConIva(), 2) . " €)</option>";
                     }
                   ?>
                 </select>
-                <button type="button" class="btn primary" onclick="addProductToOffer('edit')" style="padding:6px 12px; font-weight:bold; border-radius:4px; margin:0;">+</button>
+                <button type="button" class="btn primary px-3-py-1 fw-bold rounded-sm m-0" onclick="addProductToOffer('edit')">+</button>
             </div>
-            <div id="container-edit-prod" style="border:1px solid #ddd; border-radius:4px; padding:8px; min-height:80px; max-height:150px; overflow-y:auto; background:#fafafa;">
+            <div id="container-edit-prod" class="border-light rounded-sm p-2 bg-light min-h-80 max-h-150 overflow-y-auto">
                 <!-- Elementos añadidos aparecerán aquí -->
-                <p id="empty-edit-prod" style="color:#888; font-size:0.9em; margin:0;">Añade productos usando el botón +</p>
+                <p id="empty-edit-prod" class="text-muted text-md m-0">Añade productos usando el botón +</p>
             </div>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Fecha Fin (Opcional)</label>
             <input type="date" name="fechaFin" id="edit-fechafin-oferta">
           </section>
-        </section>
-        <section class="row" style="margin-top: 16px;">
-          <button type="submit" class="btn" style="background:var(--accent-2);">Guardar Cambios</button>
-          <button type="button" class="btn secondary" onclick="document.getElementById('form-edit-offer').style.display='none'">Cancelar</button>
-        </section>
-      </form>
-    </section>
+        </div>
+        <div class="row mt-4">
+          <button type="submit" class="btn pill orange">Guardar cambios</button>
+          <button type="button" class="btn btn-gray" onclick="document.getElementById('form-edit-offer').style.display='none'; document.getElementById('edit-title').style.display='none';">Cancelar</button>
+        </div>
+    </form>
 
     <!-- LISTA DE OFERTAS -->
     <section class="table-wrap">
@@ -117,7 +118,9 @@
         <tbody>
           <?php
           $ofertas = Oferta::getOfertas();
+          $ofertaCnt = 0;
           foreach ($ofertas as $oferta) {
+            $ofertaCnt++;
             $id = $oferta->getIdOferta();
             $nombre = htmlspecialchars($oferta->getNombre());
             $descuento = number_format($oferta->getDescuento(), 2) . ' %';
@@ -129,7 +132,7 @@
                 $activa = false;
             }
             
-            $estadoStr = $activa ? '<span style="color:green;font-weight:bold;">Activa</span>' : '<span style="color:red;">Caducada</span>';
+            $estadoStr = $activa ? '<span class="color-green fw-bold">Activa</span>' : '<span class="color-red">Caducada</span>';
             $jsNombre = htmlspecialchars(json_encode($oferta->getNombre()));
             $jsFecha = htmlspecialchars(json_encode($fechaFin ?? ''));
             $jsProductosIds = htmlspecialchars(json_encode($oferta->getProductosIds()));
@@ -147,8 +150,8 @@
                   </td>";
             echo "</tr>";
           }
-          if (empty($ofertas)) {
-              echo "<tr><td colspan='7' style='text-align:center;'>No hay ofertas registradas.</td></tr>";
+          if ($ofertaCnt === 0) {
+              echo "<tr><td colspan='7' class='text-center'>No hay ofertas registradas.</td></tr>";
           }
           ?>
         </tbody>
@@ -159,7 +162,7 @@
   </section>
 </main>
 
-<form id="form-delete-offer" method="POST" action="php/actions/offer_actions.php" style="display:none;">
+<form id="form-delete-offer" method="POST" action="php/actions/offer_actions.php" class="d-none">
     <input type="hidden" name="action" value="delete_offer">
     <input type="hidden" name="idOferta" id="delete-id-oferta">
 </form>

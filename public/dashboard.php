@@ -23,12 +23,12 @@
     <section class="panels">
       <article class="panel">
         <h3>Facturas emitidas - Pendientes de cobro</h3>
-        <article class="list-item"><span class="muted">3/2020</span><span>Maria Menendez</span><span style="margin-left:auto">1.990,69 €</span></article>
-        <article class="list-item"><span class="muted">2/2020</span><span>Jose Maria Garcia</span><span style="margin-left:auto">1.197,90 €</span></article>
+        <article class="list-item"><span class="muted">3/2020</span><span>Maria Menendez</span><span class="ml-auto">1.990,69 €</span></article>
+        <article class="list-item"><span class="muted">2/2020</span><span>Jose Maria Garcia</span><span class="ml-auto">1.197,90 €</span></article>
       </article>
       <article class="panel">
         <h3>Facturas recibidas - Pendientes de pago</h3>
-        <article class="list-item"><span class="muted">34/398</span><span>Novelier</span><span style="margin-left:auto">2.406,40 €</span></article>
+        <article class="list-item"><span class="muted">34/398</span><span>Novelier</span><span class="ml-auto">2.406,40 €</span></article>
       </article>
     </section>
 

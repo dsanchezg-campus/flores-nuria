@@ -6,36 +6,36 @@
     $mensaje = $global_msg ?? '';
     ?>
 
-    <section class="toolbar" style="margin-bottom:12px;display:flex;gap:8px">
-      <a href="index.php?page=products" class="btn secondary" style="text-decoration:none; display:flex; align-items:center; padding: 0 16px;">&laquo; Volver a Productos</a>
+    <section class="toolbar d-flex gap-2 mb-3">
+      <a href="index.php?page=products" class="btn secondary text-decoration-none d-flex align-center px-3">&laquo; Volver a Productos</a>
     </section>
 
-    <h3 style="margin-top:18px; margin-bottom:12px;">Crear Nuevo Producto</h3>
+    <h3 class="mt-5 mb-3">Crear Nuevo Producto</h3>
     <?php echo $mensaje; ?>
     
     <section class="form">
       <form method="POST" action="php/actions/product_actions.php">
         <input type="hidden" name="action" value="create_product">
         <section class="row">
-          <section style="flex:2">
+          <section class="flex-2">
             <label>Nombre del Producto *</label>
             <input type="text" name="nombre" placeholder="Ej: Rosa roja" required>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Precio Base (€) *</label>
             <input type="number" step="0.01" name="precio" required>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>IVA (%)</label>
             <input type="number" step="0.01" name="iva" value="21.00" required>
           </section>
-          <section style="flex:1">
+          <section class="flex-1">
             <label>Stock Inicial</label>
             <input type="number" name="stock" value="0">
           </section>
         </section>
 
-        <section class="row" style="margin-top: 16px;">
+        <section class="row mt-4">
           <button type="submit" class="btn">Guardar Producto</button>
         </section>
       </form>

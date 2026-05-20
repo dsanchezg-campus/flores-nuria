@@ -22,12 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $nuevoPedido = new Pedido(null, $estado, $bolsa, $fecha, 0, $proveedor);
             if ($nuevoPedido->IngresarPedido()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Pedido creado exitosamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Pedido creado exitosamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Error al guardar el pedido.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>Error al guardar el pedido.</div>";
             }
         } else {
-            $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>El proveedor es obligatorio.</div>";
+            $_SESSION['msg'] = "<div class='color-red mb-3'>El proveedor es obligatorio.</div>";
         }
         header("Location: ../../index.php?page=orders");
         exit;
@@ -41,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $bolsaVacia = new BolsaCompra(); // Evita errores
             $pedActualizar = new Pedido($idEdit, $estEdit, $bolsaVacia, $fechaEdit, 0, $provEdit);
             if ($pedActualizar->ActualizarPedido()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Pedido actualizado correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Pedido actualizado correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>No se realizaron cambios o hubo un error.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>No se realizaron cambios o hubo un error.</div>";
             }
         }
         header("Location: ../../index.php?page=orders");
@@ -54,9 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($idDel)) {
             $pedEliminar = new Pedido($idDel, '', null, '', 0, 0);
             if ($pedEliminar->EliminarPedido()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Pedido eliminado correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Pedido eliminado correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Error al eliminar pedido.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>Error al eliminar pedido.</div>";
             }
         }
         header("Location: ../../index.php?page=orders");
@@ -68,9 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($idStatus) && !empty($nuevoEstado)) {
             $ped = new Pedido($idStatus, $nuevoEstado, null, null, null, null);
             if ($ped->ModificarEstado()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Estado del pedido actualizado.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Estado del pedido actualizado.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Error al cambiar el estado.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>Error al cambiar el estado.</div>";
             }
         }
         header("Location: ../../index.php?page=orders");

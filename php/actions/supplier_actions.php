@@ -14,12 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($nombre)) {
             $nuevoProveedor = new Proveedor(null, $nombre, $direccion, $telefono, $correo);
             if ($nuevoProveedor->IngresarProveedor()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Proveedor creado correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Proveedor creado correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Error al guardar el proveedor.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>Error al guardar el proveedor.</div>";
             }
         } else {
-            $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>El nombre es obligatorio.</div>";
+            $_SESSION['msg'] = "<div class='color-red mb-3'>El nombre es obligatorio.</div>";
         }
         header("Location: ../../index.php?page=suppliers");
         exit;
@@ -34,9 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($idEdit) && !empty($nombreEdit)) {
             $provActualizar = new Proveedor($idEdit, $nombreEdit, $dirEdit, $telEdit, $corEdit);
             if ($provActualizar->ActualizarProveedor()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Proveedor actualizado correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Proveedor actualizado correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>No se realizaron cambios o hubo un error.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>No se realizaron cambios o hubo un error.</div>";
             }
         }
         header("Location: ../../index.php?page=suppliers");
@@ -47,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($idDel)) {
             $provEliminar = new Proveedor($idDel, '', '', '', '');
             if ($provEliminar->EliminarProveedor()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Proveedor eliminado correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Proveedor eliminado correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Error al eliminar proveedor.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>Error al eliminar proveedor.</div>";
             }
         }
         header("Location: ../../index.php?page=suppliers");

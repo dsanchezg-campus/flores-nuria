@@ -15,12 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($nombre) && is_numeric($descuento) && !empty($productosIds)) {
             $nuevaOferta = new Oferta(null, $nombre, $descuento, null, null, $fechaFin, $productosIds);
             if ($nuevaOferta->IngresarOferta()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Oferta creada correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Oferta creada correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Error al crear la oferta.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>Error al crear la oferta.</div>";
             }
         } else {
-            $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Datos inválidos. Verifica el formulario.</div>";
+            $_SESSION['msg'] = "<div class='color-red mb-3'>Datos inválidos. Verifica el formulario.</div>";
         }
         header("Location: ../../index.php?page=offers");
         exit;
@@ -36,9 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($idEdit) && !empty($nombreEdit) && is_numeric($descuentoEdit) && !empty($productosIdsEdit)) {
             $ofertaActualizar = new Oferta($idEdit, $nombreEdit, $descuentoEdit, null, null, $fechaFinEdit, $productosIdsEdit);
             if ($ofertaActualizar->ActualizarOferta()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Oferta actualizada correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Oferta actualizada correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>No se realizaron cambios o hubo un error.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>No se realizaron cambios o hubo un error.</div>";
             }
         }
         header("Location: ../../index.php?page=offers");
@@ -49,9 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($idDel)) {
             $ofertaEliminar = new Oferta($idDel, '', 0, null, null, null, 0);
             if ($ofertaEliminar->EliminarOferta()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Oferta eliminada correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Oferta eliminada correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Error al eliminar la oferta.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>Error al eliminar la oferta.</div>";
             }
         }
         header("Location: ../../index.php?page=offers");

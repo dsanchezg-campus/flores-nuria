@@ -14,12 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($nombre) && is_numeric($precio) && is_numeric($stock) && is_numeric($iva)) {
             $nuevoProducto = new Producto(null, $nombre, $precio, $stock, null, $iva);
             if ($nuevoProducto->IngresarProducto()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Producto creado correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Producto creado correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Error al guardar el producto.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>Error al guardar el producto.</div>";
             }
         } else {
-            $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Datos inválidos. Verifica el formulario.</div>";
+            $_SESSION['msg'] = "<div class='color-red mb-3'>Datos inválidos. Verifica el formulario.</div>";
         }
         header("Location: ../../index.php?page=products");
         exit;
@@ -40,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmtDel = $conn->prepare("DELETE FROM oferta_producto WHERE id_producto = ?");
                     $stmtDel->execute([$idEdit]);
                 }
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Producto actualizado correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Producto actualizado correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>No se realizaron cambios o hubo un error.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>No se realizaron cambios o hubo un error.</div>";
             }
         }
         header("Location: ../../index.php?page=products");
@@ -53,9 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($idDel)) {
             $prodEliminar = new Producto($idDel, '', 0, 0, null);
             if ($prodEliminar->EliminarProducto()) {
-                $_SESSION['msg'] = "<div style='color:green; margin-bottom:12px;'>Producto eliminado correctamente.</div>";
+                $_SESSION['msg'] = "<div class='color-green mb-3'>Producto eliminado correctamente.</div>";
             } else {
-                $_SESSION['msg'] = "<div style='color:red; margin-bottom:12px;'>Error al eliminar producto.</div>";
+                $_SESSION['msg'] = "<div class='color-red mb-3'>Error al eliminar producto.</div>";
             }
         }
         header("Location: ../../index.php?page=products");
