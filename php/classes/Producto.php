@@ -7,11 +7,13 @@ class Producto
     private $precio;
     private $stock;
     private $oferta;
-    public function __construct($idProducto, $nombre, $precio, $stock, $oferta){
+    private $iva;
+    public function __construct($idProducto, $nombre, $precio, $stock, $oferta, $iva = 21.00){
         $this->idProducto = $idProducto;
         $this->nombre = $nombre;
         $this->precio = $precio;
         $this->stock = $stock;
+        $this->iva = $iva;
         if ($oferta) {
             $this->oferta = $oferta;
         } else {
@@ -37,6 +39,22 @@ class Producto
     public function getOferta(){
         return $this->oferta;
     }
+    public function getIva(){
+        return $this->iva;
+    }
+    public function getPrecioConIva(){
+        $precioDesc = $this->precio;
+        if (!empty($this->oferta)) {
+            $ofertaActiva = $this->oferta[0];
+            $fechaFin = $ofertaActiva->getFechaFin();
+            // Aplicar solo si no tiene fecha fin o la fecha fin es hoy o futura
+            if (empty($fechaFin) || strtotime($fechaFin) >= strtotime(date('Y-m-d'))) {
+                $descuento = $ofertaActiva->getDescuento();
+                $precioDesc = $precioDesc * (1 - ($descuento / 100));
+            }
+        }
+        return $precioDesc * (1 + ($this->iva / 100));
+    }
 
     /*********************************  METODOS *****************************************/
     /************************************************************************************/
@@ -48,12 +66,33 @@ class Producto
         $productos = array();
         while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
             $oferta = Oferta::getOfertaByIdProducto($row->id_producto);
-            $productos = new Producto(
-                $row->idProducto,
+            $productos[] = new Producto(
+                $row->id_producto,
                 $row->nombre,
-                $row->precio,
+                $row->precioBase ?? $row->precio ?? 0, // Fallback if property names differ
                 $row->stock,
-                $oferta
+                $oferta,
+                $row->iva
+            );
+        }
+        return $productos;
+    }
+
+    public static function buscarProductos($busqueda){
+        $conn = BD::FloresNuria();
+        // Usamos ILIKE para búsqueda insensible a mayúsculas en PostgreSQL
+        $stmt = $conn->prepare("SELECT * FROM producto WHERE nombre ILIKE ?");
+        $stmt->execute(["%" . $busqueda . "%"]);
+        $productos = array();
+        while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $oferta = Oferta::getOfertaByIdProducto($row->id_producto);
+            $productos[] = new Producto(
+                $row->id_producto,
+                $row->nombre,
+                $row->precioBase ?? $row->precio ?? 0,
+                $row->stock,
+                $oferta,
+                $row->iva
             );
         }
         return $productos;
@@ -66,20 +105,22 @@ class Producto
         $row = $stmt->fetch(PDO::FETCH_OBJ);
         $oferta = Oferta::getOfertaByIdProducto($row->id_producto);
         return new Producto(
-            $row->idProducto,
+            $row->id_producto,
             $row->nombre,
             $row->precio,
             $row->stock,
-            $oferta
+            $oferta,
+            $row->iva
         );
     }
 
     public function ActualizarProducto(): bool{
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("UPDATE producto SET nombre = :nombre, precioBase = :precio, stock = :stock WHERE idProducto = :idProducto");
+        $stmt = $conn->prepare("UPDATE producto SET nombre = :nombre, \"precioBase\" = :precio, stock = :stock, iva = :iva WHERE id_producto = :idProducto");
         $stmt->bindParam(":nombre", $this->nombre);
         $stmt->bindParam(":precio", $this->precio);
         $stmt->bindParam(":stock", $this->stock);
+        $stmt->bindParam(":iva", $this->iva);
         $stmt->bindParam(":idProducto", $this->idProducto);
         $stmt->execute();
         return $stmt->rowCount() > 0;
@@ -87,17 +128,18 @@ class Producto
 
     public function IngresarProducto(): bool{
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("INSERT INTO producto(nombre, precioBase, stock) VALUES (:nombre, :precio, :stock)");
+        $stmt = $conn->prepare("INSERT INTO producto(nombre, \"precioBase\", stock, iva) VALUES (:nombre, :precio, :stock, :iva)");
         $stmt->bindParam(":nombre", $this->nombre);
         $stmt->bindParam(":precio", $this->precio);
         $stmt->bindParam(":stock", $this->stock);
+        $stmt->bindParam(":iva", $this->iva);
         $stmt->execute();
         return $stmt->rowCount() > 0;
     }
 
     public function EliminarProducto(): bool{
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("DELETE FROM producto WHERE idProducto = :idProducto");
+        $stmt = $conn->prepare("DELETE FROM producto WHERE id_producto = :idProducto");
         $stmt->bindParam(":idProducto", $this->idProducto);
         $stmt->execute();
         return $stmt->rowCount() > 0;

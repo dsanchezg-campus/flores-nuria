@@ -37,17 +37,34 @@ class Proveedor
     /*********************************  METODOS *****************************************/
     /************************************************************************************/
 
-    public function getProveedores($idProveedor): array {
+    public static function getProveedores(): array {
         $conn = BD::FloresNuria();
         $conn = $conn->query("SELECT * FROM proveedor");
         $proveedores = array();
         while ($fila = $conn->fetch(PDO::FETCH_OBJ)) {
             $proveedores[] = new Proveedor(
-                $fila["idProveedor"],
-                $fila["nombre"],
-                $fila["direccion"],
-                $fila["telefono"],
-                $fila["correo"]
+                $fila->id_proveedor ?? 0,
+                $fila->nombre ?? '',
+                $fila->direccion ?? '',
+                $fila->telefono ?? '',
+                $fila->correo ?? ''
+            );
+        }
+        return $proveedores;
+    }
+
+    public static function buscarProveedores($busqueda): array {
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT * FROM proveedor WHERE nombre ILIKE ?");
+        $stmt->execute(["%" . $busqueda . "%"]);
+        $proveedores = array();
+        while ($fila = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $proveedores[] = new Proveedor(
+                $fila->id_proveedor ?? 0,
+                $fila->nombre ?? '',
+                $fila->direccion ?? '',
+                $fila->telefono ?? '',
+                $fila->correo ?? ''
             );
         }
         return $proveedores;

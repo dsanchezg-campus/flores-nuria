@@ -8,9 +8,10 @@ class Oferta
     private $fechaCreacion;
     private $fechaActualizacion;
     private $fechaFin;
-    private $idProducto;
+    private $productosIds;
+    public $producto_nombre; // Para vistas
 
-    public function __construct($idOferta, $nombre, $descuento, $fechaCreacion, $fechaActualizacion, $fechaFin, $idProducto)
+    public function __construct($idOferta, $nombre, $descuento, $fechaCreacion, $fechaActualizacion, $fechaFin, $productosIds = [])
     {
         $this->idOferta = $idOferta;
         $this->nombre = $nombre;
@@ -18,7 +19,7 @@ class Oferta
         $this->fechaCreacion = $fechaCreacion;
         $this->fechaActualizacion = $fechaActualizacion;
         $this->fechaFin = $fechaFin;
-        $this->idProducto = $idProducto;
+        $this->productosIds = is_array($productosIds) ? $productosIds : (empty($productosIds) ? [] : explode(',', $productosIds));
     }
 
     /*********************************  GETTERS y SETTERS *******************************/
@@ -42,19 +43,46 @@ class Oferta
     public function getFechaFin(){
         return $this->fechaFin;
     }
-    public function getIdProducto(){
-        return $this->idProducto;
+    public function getProductosIds(){
+        return $this->productosIds;
     }
 
     /********************************** METODOS *****************************************/
     /************************************************************************************/
 
+    public static function getOfertas(): array{
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT o.*, 
+            STRING_AGG(p.nombre, ', ') as producto_nombre, 
+            STRING_AGG(p.id_producto::text, ',') as productos_ids
+            FROM ofertas o 
+            LEFT JOIN oferta_producto op ON o.id_oferta = op.id_oferta
+            LEFT JOIN producto p ON op.id_producto = p.id_producto
+            GROUP BY o.id_oferta");
+        $stmt->execute();
+        $ofertas = array();
+        while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $oferta = new Oferta(
+                $row->id_oferta,
+                $row->nombre,
+                $row->descuento,
+                $row->fecha_creacion,
+                $row->fecha_actualizacion,
+                $row->fechaFin,
+                $row->productos_ids
+            );
+            $oferta->producto_nombre = $row->producto_nombre;
+            $ofertas[] = $oferta;
+        }
+        return $ofertas;
+    }
+
     public static function getOfertaByIdProducto($idProducto): array{
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("SELECT * FROM oferta WHERE idProducto = ?");
+        $stmt = $conn->prepare("SELECT o.* FROM ofertas o JOIN oferta_producto op ON o.id_oferta = op.id_oferta WHERE op.id_producto = ?");
         $stmt->execute([$idProducto]);
         $ofertas = array();
-        while ($row = $stmt->fetch()) {
+        while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
             $ofertas[] = new Oferta(
                 $row->id_oferta,
                 $row->nombre,
@@ -62,7 +90,7 @@ class Oferta
                 $row->fecha_creacion,
                 $row->fecha_actualizacion,
                 $row->fechaFin,
-                $row->id_producto
+                [$idProducto]
             );
         }
         return $ofertas;
@@ -70,21 +98,42 @@ class Oferta
 
     public function IngresarOferta(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("INSERT INTO ofertas(nombre, descuento, fechaFin, idProducto) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin, $this->idProducto]);
-        return $conn->lastInsertId();
+        $stmt = $conn->prepare("INSERT INTO ofertas(nombre, descuento, \"fechaFin\") VALUES (?, ?, ?)");
+        $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin]);
+        $idOferta = $conn->lastInsertId();
+        
+        if ($idOferta && !empty($this->productosIds)) {
+            $stmtInsert = $conn->prepare("INSERT INTO oferta_producto(id_oferta, id_producto) VALUES (?, ?)");
+            foreach($this->productosIds as $idProd) {
+                $stmtInsert->execute([$idOferta, $idProd]);
+            }
+        }
+        return $idOferta;
     }
 
     public function ActualizarOferta(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("UPDATE ofertas SET nombre=?, descuento=?, fechaFin=?, idProducto = ? WHERE idOferta = ?");
-        $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin, $this->IdProducto, $this->idOferta]);
-        return $stmt->rowCount() > 0;
+        $stmt = $conn->prepare("UPDATE ofertas SET nombre=?, descuento=?, \"fechaFin\"=? WHERE id_oferta = ?");
+        $ex = $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin, $this->idOferta]);
+        
+        if ($ex) {
+            $stmtDel = $conn->prepare("DELETE FROM oferta_producto WHERE id_oferta = ?");
+            $stmtDel->execute([$this->idOferta]);
+            
+            if (!empty($this->productosIds)) {
+                $stmtInsert = $conn->prepare("INSERT INTO oferta_producto(id_oferta, id_producto) VALUES (?, ?)");
+                foreach($this->productosIds as $idProd) {
+                    $stmtInsert->execute([$this->idOferta, $idProd]);
+                }
+            }
+        }
+        
+        return $ex;
     }
 
     public function EliminarOferta(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("DELETE FROM ofertas WHERE idOferta = ?");
+        $stmt = $conn->prepare("DELETE FROM ofertas WHERE id_oferta = ?");
         $stmt->execute([$this->idOferta]);
         return $stmt->rowCount() > 0;
     }

@@ -36,7 +36,7 @@ class Pedido
         return $this->estado;
     }
     public function getFechaCreacion(){
-        return $this->fechaCreacion;
+        return $this->fecha;
     }
     public function getBolsaCompra(){
         return $this->bolsaCompra;
@@ -53,9 +53,29 @@ class Pedido
 
     public static function getPedidos(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("SELECT p.*, pp.id_producto, pp.cantidad 
-            FROM pedidos p 
-            INNER JOIN pedido_producto pp ON p.id_pedido = pp.id_pedido");
+        $stmt = $conn->prepare("SELECT p.* 
+            FROM pedidos p");
+        $stmt->execute();
+        $pedidos = array();
+        while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $bolsa_compra = BolsaCompra::getBolsaCompraByIdPedido($row->id_pedido);
+            $pedidos[] = new Pedido(
+                $row->id_pedido,
+                $row->estado,
+                $bolsa_compra,
+                $row->fechaPedido,
+                $row->total_pedido,
+                $row->id_proveedor
+            );
+        }
+        return $pedidos;
+    }
+
+    public static function buscarPedidos($busqueda){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT p.* FROM pedidos p LEFT JOIN proveedor pr ON p.id_proveedor = pr.id_proveedor WHERE p.estado ILIKE :busqueda OR pr.nombre ILIKE :busqueda");
+        $termino = "%" . trim($busqueda) . "%";
+        $stmt->bindParam(":busqueda", $termino);
         $stmt->execute();
         $pedidos = array();
         while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
@@ -74,19 +94,41 @@ class Pedido
 
     public function IngresarPedido(){
         $conn = BD::FloresNuria();
-        $stmt  = $conn->prepare("INSERT INTO pedidos (fecha, estado, id_proveedor) VALUES (:fecha, :estado, :id_proveedor)");
+        $stmt  = $conn->prepare("INSERT INTO pedidos (\"fechaPedido\", estado, id_proveedor) VALUES (:fecha, :estado, :id_proveedor) RETURNING id_pedido");
         $stmt->bindParam(":estado", $this->estado);
         $stmt->bindParam(":fecha", $this->fecha);
         $stmt->bindParam(":id_proveedor", $this->idProveedor);
         $stmt->execute();
-        $pedido = $conn->lastInsertId();
-        $this->bolsaCompra->IngresarPedidoProductos($this);
-        return $stmt->rowCount() > 0;
+        
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $this->idPedido = $row['id_pedido'];
+            $this->bolsaCompra->IngresarPedidoProductos($this);
+            
+            if ($this->estado === 'Recibido') {
+                $this->ajustarStock(1);
+            }
+            
+            return true;
+        }
+        return false;
     }
 
     public function EliminarPedido(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("DELETE FROM pedidos AND pedido_productos WHERE id_pedido = :id_pedido");
+        
+        $stmtOld = $conn->prepare("SELECT estado FROM pedidos WHERE id_pedido = :id");
+        $stmtOld->execute([":id" => $this->idPedido]);
+        $old_state = $stmtOld->fetchColumn();
+        
+        if ($old_state === 'Recibido') {
+            $this->ajustarStock(-1);
+        }
+        
+        $stmt = $conn->prepare("DELETE FROM pedido_producto WHERE id_pedido = :id_pedido");
+        $stmt->bindParam(":id_pedido", $this->idPedido);
+        $stmt->execute();
+        $stmt = $conn->prepare("DELETE FROM pedidos WHERE id_pedido = :id_pedido");
         $stmt->bindParam(":id_pedido", $this->idPedido);
         $stmt->execute();
         return $stmt->rowCount() > 0;
@@ -94,23 +136,64 @@ class Pedido
 
     public function ModificarEstado(){
         $conn = BD::FloresNuria();
+        
+        $stmtOld = $conn->prepare("SELECT estado FROM pedidos WHERE id_pedido = :id");
+        $stmtOld->execute([":id" => $this->idPedido]);
+        $old_state = $stmtOld->fetchColumn();
+        
         $stmt = $conn->prepare("UPDATE pedidos SET estado = :estado WHERE id_pedido = :id");
         $stmt->bindParam(":estado", $this->estado);
         $stmt->bindParam(":id", $this->idPedido);
         $stmt->execute();
-        return $stmt->rowCount() > 0;
+        
+        $updated = $stmt->rowCount() > 0;
+        if ($old_state && $old_state !== $this->estado) {
+            if ($this->estado === 'Recibido') {
+                $this->ajustarStock(1);
+            } elseif ($old_state === 'Recibido') {
+                $this->ajustarStock(-1);
+            }
+        }
+        
+        return $updated;
     }
 
     public function ActualizarPedido(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("UPDATE pedidos SET fecha = :fecha, estado = :estado, id_proveedor = :id_proveedor WHERE id_pedido = :id");
+        
+        $stmtOld = $conn->prepare("SELECT estado FROM pedidos WHERE id_pedido = :id");
+        $stmtOld->execute([":id" => $this->idPedido]);
+        $old_state = $stmtOld->fetchColumn();
+        
+        $stmt = $conn->prepare("UPDATE pedidos SET \"fechaPedido\" = :fecha, estado = :estado, id_proveedor = :id_proveedor WHERE id_pedido = :id");
         $stmt->bindParam(":estado", $this->estado);
         $stmt->bindParam(":fecha", $this->fecha);
         $stmt->bindParam(":id_proveedor", $this->idProveedor);
         $stmt->bindParam(":id", $this->idPedido);
         $stmt->execute();
+        
         $this->bolsaCompra->IngresarPedidoProductos($this);
-        return $stmt->rowCount() > 0;
+        
+        if ($old_state && $old_state !== $this->estado) {
+            if ($this->estado === 'Recibido') {
+                $this->ajustarStock(1);
+            } elseif ($old_state === 'Recibido') {
+                $this->ajustarStock(-1);
+            }
+        }
+        
+        return true;
+    }
+
+    private function ajustarStock($multiplicador){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT id_producto, cantidad FROM pedido_producto WHERE id_pedido = ?");
+        $stmt->execute([$this->idPedido]);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $cantidad = $row['cantidad'] * $multiplicador;
+            $upd = $conn->prepare("UPDATE producto SET stock = stock + ? WHERE id_producto = ?");
+            $upd->execute([$cantidad, $row['id_producto']]);
+        }
     }
 
 }

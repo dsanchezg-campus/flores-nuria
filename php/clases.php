@@ -1,4 +1,5 @@
 <?php
+require_once "classes/BD.php";
 require_once "classes/BolsaCompra.php";
 require_once "classes/Cliente.php";
 require_once "classes/Empleado.php";

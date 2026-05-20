@@ -56,7 +56,7 @@ class Ticket
                 $row->id_venta,
                 $row->id_empleado,
                 $row->id_cliente,
-                $row->fechaCreacion,
+                $row->fecha,
                 $row->precio,
                 $row->num_ticket,
                 $bolsa_compra
@@ -104,7 +104,10 @@ class Ticket
 
     public function EliminarTicket(): bool{
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("DELETE FROM venta AND venta_producto WHERE id_venta = :id_venta");
+        $stmt = $conn->prepare("DELETE FROM venta_producto WHERE id_venta = :id_venta");
+        $stmt->bindParam(":id_venta", $this->idTicket);
+        $stmt->execute();
+        $stmt = $conn->prepare("DELETE FROM venta WHERE id_venta = :id_venta");
         $stmt->bindParam(":id_venta", $this->idTicket);
         $stmt->execute();
         return $stmt->rowCount() > 0;

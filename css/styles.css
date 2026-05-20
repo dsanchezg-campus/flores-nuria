@@ -31,7 +31,15 @@ html,body{
     width:240px;
     background:var(--sidebar-bg);
     color:var(--sidebar-text);
-    padding:28px 18px 40px 18px
+    padding:28px 18px 40px 18px;
+    display:none; /* Oculto por defecto */
+    overflow-y:auto; /* Scrollbar propio */
+    height:100vh;
+    position:sticky;
+    top:0;
+}
+.sidebar.active{
+    display:block;
 }
 .logo{
     display:flex;
@@ -49,7 +57,7 @@ html,body{
 .menu-toggle{
     margin-left:auto;
     font-size:28px;
-    color:#fff;
+    color:#2c3e50; /* Cambiado para que sea visible en el fondo claro */
     background:transparent;
     border:none;
     cursor:pointer

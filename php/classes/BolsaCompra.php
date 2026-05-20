@@ -56,34 +56,38 @@ class BolsaCompra
 
     public function IngresarPedidoProductos($pedido){
         $conn = BD::FloresNuria();
+        $rowCount = 0;
         foreach ($this->productos as $producto){
             $stmt = $conn->prepare("SELECT id_producto FROM pedido_producto WHERE id_producto = :id_producto AND id_pedido = :id_pedido");
             $stmt->bindParam(":id_producto", $producto[0]);
-            $stmt->bindParam(":id_pedido", $pedido->getIdPedido());
+            $idPed = $pedido->getIdPedido();
+            $stmt->bindParam(":id_pedido", $idPed);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
-                $stmt = $conn->prepare("UPDATE pedido_producto SET cantidad = :cantidad WHERE id_producto = :id_producto AND id_pedido = :id_pedido");
-                $stmt->bindParam(":id_producto", $producto->getIdProducto());
-                $stmt->bindParam(":cantidad", $producto->getCantidad());
-                $stmt->bindParam(":id_pedido", $pedido->getIdPedido());
-                $stmt->execute();
+                $stmtUpdate = $conn->prepare("UPDATE pedido_producto SET cantidad = :cantidad WHERE id_producto = :id_producto AND id_pedido = :id_pedido");
+                $stmtUpdate->bindParam(":id_producto", $producto[0]);
+                $stmtUpdate->bindParam(":cantidad", $producto[1]);
+                $stmtUpdate->bindParam(":id_pedido", $idPed);
+                $stmtUpdate->execute();
+                $rowCount += $stmtUpdate->rowCount();
             } else{
-                $stmt = $conn->prepare("INSERT INTO pedido_producto(id_producto, id_pedido, cantidad) VALUES(:id_pedido, :id_producto, :cantidad)");
-                $stmt->bindParam(":id_pedido", $pedido->getIdPedido());
-                $stmt->bindParam(":id_producto", $producto->getIdProducto());
-                $stmt->bindParam(":cantidad", $producto->getCantidad());
-                $stmt->execute();
+                $stmtInsert = $conn->prepare("INSERT INTO pedido_producto(id_pedido, id_producto, cantidad) VALUES(:id_pedido, :id_producto, :cantidad)");
+                $stmtInsert->bindParam(":id_pedido", $idPed);
+                $stmtInsert->bindParam(":id_producto", $producto[0]);
+                $stmtInsert->bindParam(":cantidad", $producto[1]);
+                $stmtInsert->execute();
+                $rowCount += $stmtInsert->rowCount();
             }
         }
-        return $stmt->rowCount() > 0;
+        return $rowCount > 0;
     }
 
     public function IngresarVentaProductos($venta){
         $conn = BD::FloresNuria();
         foreach ($this->productos as $producto) {
-            $stmt = $conn->prepare("SELECT id_producto FROM venta_producto WHERE id_producto = :id_producto AND id_pedido = :id_venta");
+            $stmt = $conn->prepare("SELECT id_producto FROM venta_producto WHERE id_producto = :id_producto AND id_venta = :id_venta");
             $stmt->bindParam(":id_producto", $producto[0]);
-            $stmt->bindParam(":id_pedido", $venta->getIdVenta());
+            $stmt->bindParam(":id_venta", $venta->getIdVenta());
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $stmt = $conn->prepare("UPDATE venta_producto SET cantidad = :cantidad WHERE id_venta = :id_venta

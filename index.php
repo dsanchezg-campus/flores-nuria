@@ -1,4 +1,13 @@
 <?php
+session_start();
+require_once __DIR__ . '/php/clases.php';
+
+$global_msg = '';
+if (isset($_SESSION['msg'])) {
+    $global_msg = $_SESSION['msg'];
+    unset($_SESSION['msg']);
+}
+
 // Página principal: ensamblado visual. Sin lógica de negocio.
 ?>
 <!doctype html>
@@ -8,13 +17,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Floristería - Panel</title>
   <link rel="stylesheet" href="css/styles.css">
+  <script src="js/menu.js" defer></script>
 </head>
 <body>
   <div class="app">
     <?php
       $page = $_GET['page'] ?? 'dashboard';
       include __DIR__ . '/public/sidebar.php';
-      $allowedPages = ['dashboard', 'products', 'employees', 'reports', 'payments', 'schedule', 'customers', 'suppliers', 'invoices', 'deliveries', 'budgets'];
+      $allowedPages = ['dashboard', 'products', 'employees', 'reports', 'payments', 'schedule', 'customers', 'suppliers', 'invoices', 'deliveries', 'budgets', 'create_product', 'create_supplier', 'orders', 'create_order', 'offers'];
       if(in_array($page, $allowedPages, true)){
         include __DIR__ . '/public/' . $page . '.php';
       } else {
@@ -22,5 +32,6 @@
       }
     ?>
   </div>
+  
 </body>
 </html>
