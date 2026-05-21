@@ -28,9 +28,22 @@
             <input type="number" step="0.01" name="descuento" placeholder="Ej: 15" required>
           </section>
           <section class="flex-1">
+            <label>Fecha Fin (Opcional)</label>
+            <input type="date" name="fechaFin">
+          </section>
+          <section class="flex-1">
+            <label>Estado *</label>
+            <select name="activa" required>
+              <option value="1" selected>Activa</option>
+              <option value="0">Inactiva</option>
+            </select>
+          </section>
+        </div>
+        <div class="row mt-3">
+          <section class="flex-1">
             <label>Productos *</label>
             <div class="d-flex gap-2 mb-2 align-center">
-                <input type="text" id="search-create-prod" placeholder="Buscar producto..." onkeyup="filterProducts('create')" class="flex-1 px-3-py-1 border-base rounded-sm">
+                <input type="text" id="search-create-prod" placeholder="Buscar producto..." onkeyup="filterProducts('create')" class="flex-1 px-3-py-1 border-base rounded-sm" style="max-width: 300px;">
                 <select id="select-create-prod" class="flex-2 px-3-py-1 border-base rounded-sm">
                   <?php
                     $productos = Producto::getProductos();
@@ -46,17 +59,6 @@
                 <!-- Elementos añadidos aparecerán aquí -->
                 <p id="empty-create-prod" class="text-muted text-md m-0">Añade productos usando el botón +</p>
             </div>
-          </section>
-          <section class="flex-1">
-            <label>Fecha Fin (Opcional)</label>
-            <input type="date" name="fechaFin">
-          </section>
-          <section class="flex-1">
-            <label>Estado *</label>
-            <select name="activa" required>
-              <option value="1" selected>Activa</option>
-              <option value="0">Inactiva</option>
-            </select>
           </section>
         </div>
         <div class="row mt-4">
@@ -80,10 +82,23 @@
             <label>Descuento (%) *</label>
             <input type="number" step="0.01" name="descuento" id="edit-descuento-oferta" required>
           </section>
-          <section class="flex-2">
+          <section class="flex-1">
+            <label>Fecha Fin (Opcional)</label>
+            <input type="date" name="fechaFin" id="edit-fechafin-oferta">
+          </section>
+          <section class="flex-1">
+            <label>Estado *</label>
+            <select name="activa" id="edit-activa-oferta" required>
+              <option value="1">Activa</option>
+              <option value="0">Inactiva</option>
+            </select>
+          </section>
+        </div>
+        <div class="row mt-3">
+          <section class="flex-1">
             <label>Productos *</label>
             <div class="d-flex gap-2 mb-2 align-center">
-                <input type="text" id="search-edit-prod" placeholder="Buscar producto..." onkeyup="filterProducts('edit')" class="flex-1 px-3-py-1 border-base rounded-sm">
+                <input type="text" id="search-edit-prod" placeholder="Buscar producto..." onkeyup="filterProducts('edit')" class="flex-1 px-3-py-1 border-base rounded-sm" style="max-width: 300px;">
                 <select id="select-edit-prod" class="flex-2 px-3-py-1 border-base rounded-sm">
                   <?php
                     foreach($productos as $p){
@@ -98,17 +113,6 @@
                 <!-- Elementos añadidos aparecerán aquí -->
                 <p id="empty-edit-prod" class="text-muted text-md m-0">Añade productos usando el botón +</p>
             </div>
-          </section>
-          <section class="flex-1">
-            <label>Fecha Fin (Opcional)</label>
-            <input type="date" name="fechaFin" id="edit-fechafin-oferta">
-          </section>
-          <section class="flex-1">
-            <label>Estado *</label>
-            <select name="activa" id="edit-activa-oferta" required>
-              <option value="1">Activa</option>
-              <option value="0">Inactiva</option>
-            </select>
           </section>
         </div>
         <div class="row mt-4">
