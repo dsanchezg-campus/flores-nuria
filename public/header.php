@@ -22,7 +22,7 @@ $pageLabelMap = [
   'create-budget' => 'Crear Presupuesto',
   'offers' => 'Ofertas',
   'orders' => 'Pedidos emitidos',
-  
+
 ];
 $currentPage = $page ?? ($_GET['page'] ?? 'dashboard');
 $currentPageLabel = $pageLabelMap[$currentPage] ?? 'Dashboard';
