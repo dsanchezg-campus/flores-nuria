@@ -10,7 +10,16 @@ $pageLabelMap = [
   'suppliers' => 'Proveedores',
   'invoices' => 'Facturas emitidas',
   'deliveries' => 'Albaranes emitidos',
-  'budgets' => 'Presupuestos emitidos'
+  'budgets' => 'Presupuestos emitidos',
+  'login' => 'Acceder',
+  'register' => 'Registrarse',
+  'create-employee' => 'Crear Empleado',
+  'create-product' => 'Crear Producto',
+  'create-customer' => 'Crear Cliente',
+  'create-supplier' => 'Crear Proveedor',
+  'create-invoice' => 'Crear Factura',
+  'create-delivery' => 'Crear Albaran',
+  'create-budget' => 'Crear Presupuesto',
 ];
 $currentPage = $page ?? ($_GET['page'] ?? 'dashboard');
 $currentPageLabel = $pageLabelMap[$currentPage] ?? 'Dashboard';
