@@ -28,9 +28,5 @@ function sidebarActive(string $slug, string $current): string {
       <li class="<?= sidebarActive('deliveries', $currentPage) ?>"><a href="?page=deliveries"><span class="icon">📄</span>Albaranes emitidos</a></li>
       <li class="<?= sidebarActive('budgets', $currentPage) ?>"><a href="?page=budgets"><span class="icon">📑</span>Presupuestos emitidos</a></li>
     </ul>
-    <h4>Usuario</h4>
-    <ul>
-      <li><a href="php/actions/auth_actions.php?action=logout"><span class="icon">🚪</span>Cerrar Sesión</a></li>
-    </ul>
   </nav>
 </aside>

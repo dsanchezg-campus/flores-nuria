@@ -27,6 +27,11 @@ $breadcrumbItems = ['Dashboard'];
 if($currentPage !== 'dashboard'){
   $breadcrumbItems[] = $currentPageLabel;
 }
+<?php
+$userInitial = 'U';
+if (isset($_SESSION['empleado_nombre']) && !empty($_SESSION['empleado_nombre'])) {
+  $userInitial = mb_strtoupper(mb_substr($_SESSION['empleado_nombre'], 0, 1, 'UTF-8'));
+}
 ?>
 <header class="header">
   <section class="left">
@@ -41,7 +46,15 @@ if($currentPage !== 'dashboard'){
       </ol>
     </nav>
   </section>
-  <section class="right">
-    <span class="user-circle">D</span>
+  <section class="right user-menu-container">
+    <button class="user-circle" id="userMenuBtn" type="button" aria-haspopup="true" aria-expanded="false"><?= htmlspecialchars($userInitial, ENT_QUOTES, 'UTF-8') ?></button>
+    <div class="user-dropdown" id="userDropdown" role="menu">
+      <div class="user-dropdown-info">
+        <strong><?= htmlspecialchars($_SESSION['empleado_nombre'] ?? 'Usuario', ENT_QUOTES, 'UTF-8') ?></strong>
+        <span class="user-dropdown-role"><?= htmlspecialchars($_SESSION['empleado_puesto'] ?? 'Personal', ENT_QUOTES, 'UTF-8') ?></span>
+      </div>
+      <div class="dropdown-divider"></div>
+      <a href="php/actions/auth_actions.php?action=logout" role="menuitem"><span class="icon">🚪</span> Cerrar Sesión</a>
+    </div>
   </section>
 </header>

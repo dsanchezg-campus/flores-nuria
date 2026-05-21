@@ -8,10 +8,29 @@ document.addEventListener('DOMContentLoaded', () => {
             sidebar.classList.toggle('active');
         });
 
-        // Cerrar el sidebar al hacer clic fuera de él (muy útil en pantallas móviles)
+        // Cerrar el sidebar al hacer clic fuera de él (solo en pantallas móviles <= 900px)
         document.addEventListener('click', (e) => {
-            if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && e.target !== menuToggle) {
-                sidebar.classList.remove('active');
+            if (window.innerWidth <= 900) {
+                if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && e.target !== menuToggle) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+    }
+
+    // --- Menú desplegable de usuario (Dropdown) ---
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userDropdown = document.getElementById('userDropdown');
+    
+    if (userMenuBtn && userDropdown) {
+        userMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('active');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!userDropdown.contains(e.target) && e.target !== userMenuBtn) {
+                userDropdown.classList.remove('active');
             }
         });
     }

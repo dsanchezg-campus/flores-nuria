@@ -47,15 +47,15 @@ body {
                 opacity 0.35s ease,
                 visibility 0.35s ease;
     
-    margin-left: -240px;
-    opacity: 0;
-    visibility: hidden;
-}
-
-.sidebar.active {
     margin-left: 0;
     opacity: 1;
     visibility: visible;
+}
+
+.sidebar.active {
+    margin-left: -240px;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .logo {
@@ -188,16 +188,102 @@ body {
     margin-right: 8px
 }
 
+.user-menu-container {
+    position: relative;
+}
+
 .user-circle {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: #000;
+    background: #2c3e50;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    transition: background 0.2s, transform 0.2s;
+    outline: none;
+}
+
+.user-circle:hover {
+    background: #1a252f;
+    transform: scale(1.05);
+}
+
+.user-dropdown {
+    position: absolute;
+    right: 0;
+    top: 52px;
+    width: 220px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 8px 0;
+    display: none;
+    flex-direction: column;
+    z-index: 1001;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transform-origin: top right;
+}
+
+.user-dropdown.active {
+    display: flex;
+    animation: dropdownScale 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes dropdownScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.user-dropdown-info {
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-dropdown-info strong {
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+.user-dropdown-info .user-dropdown-role {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-top: 2px;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #f1f2f3;
+    margin: 6px 0;
+}
+
+.user-dropdown a {
+    padding: 10px 16px;
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.user-dropdown a:hover {
+    background: #f8f9fa;
+    color: #e74c3c;
 }
 
 .container {
@@ -490,6 +576,15 @@ body {
     .sidebar {
         position: fixed;
         z-index: 1000;
+        margin-left: -240px;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .sidebar.active {
+        margin-left: 0;
+        opacity: 1;
+        visibility: visible;
         box-shadow: 4px 0 25px rgba(0, 0, 0, 0.35);
     }
 
