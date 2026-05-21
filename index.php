@@ -1,6 +1,13 @@
 <?php
-session_start();
 require_once __DIR__ . '/php/clases.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!Empleado::checkSession()) {
+    include __DIR__ . '/public/login.php';
+    exit;
+}
 
 $global_msg = '';
 if (isset($_SESSION['msg'])) {
