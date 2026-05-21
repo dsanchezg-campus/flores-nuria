@@ -36,17 +36,26 @@ body {
     background: var(--sidebar-bg);
     color: var(--sidebar-text);
     padding: 28px 18px 40px 18px;
-    display: none;
-    /* Oculto por defecto */
     overflow-y: auto;
     /* Scrollbar propio */
     height: 100vh;
     position: sticky;
     top: 0;
+    
+    /* Elegante animación de despliegue */
+    transition: margin-left 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+                opacity 0.35s ease,
+                visibility 0.35s ease;
+    
+    margin-left: -240px;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .sidebar.active {
-    display: block;
+    margin-left: 0;
+    opacity: 1;
+    visibility: visible;
 }
 
 .logo {
@@ -479,7 +488,9 @@ body {
 /* Responsive */
 @media(max-width:900px) {
     .sidebar {
-        display: none
+        position: fixed;
+        z-index: 1000;
+        box-shadow: 4px 0 25px rgba(0, 0, 0, 0.35);
     }
 
     .container {
