@@ -216,6 +216,20 @@ function addProductToOffer(type, idProd = null, nameProd = null) {
     container.appendChild(div);
 }
 
+function addAllProductsToOffer(type) {
+    const select = document.getElementById('select-' + type + '-prod');
+    if (!select) return;
+    
+    for (let i = 0; i < select.options.length; i++) {
+        const option = select.options[i];
+        const id = option.value;
+        const name = option.text;
+        if (id) {
+            addProductToOffer(type, id, name);
+        }
+    }
+}
+
 function checkEmptyOfferProducts(type) {
     const container = document.getElementById('container-' + type + '-prod');
     const inputs = container.querySelectorAll('input[name="productos[]"]');

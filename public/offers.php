@@ -40,6 +40,7 @@
                   ?>
                 </select>
                 <button type="button" class="btn primary px-3-py-1 fw-bold rounded-sm m-0" onclick="addProductToOffer('create')">+</button>
+                <button type="button" class="btn secondary px-3-py-1 rounded-sm m-0" onclick="addAllProductsToOffer('create')" title="Añadir todos los productos">Añadir todos</button>
             </div>
             <div id="container-create-prod" class="border-light rounded-sm p-2 bg-light min-h-80 max-h-150 overflow-y-auto">
                 <!-- Elementos añadidos aparecerán aquí -->
@@ -91,6 +92,7 @@
                   ?>
                 </select>
                 <button type="button" class="btn primary px-3-py-1 fw-bold rounded-sm m-0" onclick="addProductToOffer('edit')">+</button>
+                <button type="button" class="btn secondary px-3-py-1 rounded-sm m-0" onclick="addAllProductsToOffer('edit')" title="Añadir todos los productos">Añadir todos</button>
             </div>
             <div id="container-edit-prod" class="border-light rounded-sm p-2 bg-light min-h-80 max-h-150 overflow-y-auto">
                 <!-- Elementos añadidos aparecerán aquí -->
