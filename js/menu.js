@@ -198,10 +198,13 @@ function checkEmptyOfferProducts(type) {
     }
 }
 
-function editOffer(id, nombre, descuento, productosIds, fechaFin) {
+function editOffer(id, nombre, descuento, productosIds, fechaFin, activa) {
     document.getElementById('form-create-offer').style.display = 'none';
     const form = document.getElementById('form-edit-offer');
     form.style.display = 'block';
+    if (document.getElementById('edit-title')) {
+        document.getElementById('edit-title').style.display = 'block';
+    }
     
     document.getElementById('edit-id-oferta').value = id;
     document.getElementById('edit-nombre-oferta').value = nombre;
@@ -224,8 +227,16 @@ function editOffer(id, nombre, descuento, productosIds, fechaFin) {
     });
     
     document.getElementById('edit-fechafin-oferta').value = fechaFin;
+    if (document.getElementById('edit-activa-oferta')) {
+        document.getElementById('edit-activa-oferta').value = activa ? "1" : "0";
+    }
     
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleOfferStatus(id) {
+    document.getElementById('toggle-id-oferta').value = id;
+    document.getElementById('form-toggle-offer').submit();
 }
 
 function deleteOffer(id) {

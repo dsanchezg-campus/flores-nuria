@@ -50,6 +50,13 @@
             <label>Fecha Fin (Opcional)</label>
             <input type="date" name="fechaFin">
           </section>
+          <section class="flex-1">
+            <label>Estado *</label>
+            <select name="activa" required>
+              <option value="1" selected>Activa</option>
+              <option value="0">Inactiva</option>
+            </select>
+          </section>
         </div>
         <div class="row mt-4">
           <button type="submit" class="btn pill green">Crear Oferta</button>
@@ -94,6 +101,13 @@
             <label>Fecha Fin (Opcional)</label>
             <input type="date" name="fechaFin" id="edit-fechafin-oferta">
           </section>
+          <section class="flex-1">
+            <label>Estado *</label>
+            <select name="activa" id="edit-activa-oferta" required>
+              <option value="1">Activa</option>
+              <option value="0">Inactiva</option>
+            </select>
+          </section>
         </div>
         <div class="row mt-4">
           <button type="submit" class="btn pill orange">Guardar cambios</button>
@@ -127,15 +141,21 @@
             $producto = htmlspecialchars($oferta->producto_nombre);
             $fechaFin = $oferta->getFechaFin();
             
-            $activa = true;
-            if(!empty($fechaFin) && strtotime($fechaFin) < strtotime(date('Y-m-d'))){
-                $activa = false;
+            $activaDb = $oferta->getActiva();
+            $isCaducada = (!empty($fechaFin) && strtotime($fechaFin) < strtotime(date('Y-m-d')));
+            
+            if (!$activaDb) {
+                $estadoStr = '<span class="status-badge status-inactive">Inactiva</span>';
+            } elseif ($isCaducada) {
+                $estadoStr = '<span class="status-badge status-expired">Caducada</span>';
+            } else {
+                $estadoStr = '<span class="status-badge status-active">Activa</span>';
             }
             
-            $estadoStr = $activa ? '<span class="color-green fw-bold">Activa</span>' : '<span class="color-red">Caducada</span>';
             $jsNombre = htmlspecialchars(json_encode($oferta->getNombre()));
             $jsFecha = htmlspecialchars(json_encode($fechaFin ?? ''));
             $jsProductosIds = htmlspecialchars(json_encode($oferta->getProductosIds()));
+            $jsActiva = $activaDb ? 'true' : 'false';
             
             echo "<tr>";
             echo "<td>{$id}</td>";
@@ -143,9 +163,17 @@
             echo "<td>{$descuento}</td>";
             echo "<td>{$producto}</td>";
             echo "<td>" . ($fechaFin ? date('d/m/Y', strtotime($fechaFin)) : 'Sin límite') . "</td>";
-            echo "<td>{$estadoStr}</td>";
+            echo "<td>
+                    <div class='d-flex align-center gap-2'>
+                        <label class='switch'>
+                            <input type='checkbox' " . ($activaDb ? 'checked' : '') . " onchange='toggleOfferStatus({$id})'>
+                            <span class='slider round'></span>
+                        </label>
+                        {$estadoStr}
+                    </div>
+                  </td>";
             echo "<td class=\"actions\">
-                    <button type=\"button\" class=\"btn-edit\" onclick='editOffer({$id}, {$jsNombre}, {$oferta->getDescuento()}, {$jsProductosIds}, {$jsFecha})'>✎</button>
+                    <button type=\"button\" class=\"btn-edit\" onclick='editOffer({$id}, {$jsNombre}, {$oferta->getDescuento()}, {$jsProductosIds}, {$jsFecha}, {$jsActiva})'>✎</button>
                     <button type=\"button\" class=\"btn-delete\" onclick='deleteOffer({$id})'>🗑</button>
                   </td>";
             echo "</tr>";
@@ -165,4 +193,9 @@
 <form id="form-delete-offer" method="POST" action="php/actions/offer_actions.php" class="d-none">
     <input type="hidden" name="action" value="delete_offer">
     <input type="hidden" name="idOferta" id="delete-id-oferta">
+</form>
+
+<form id="form-toggle-offer" method="POST" action="php/actions/offer_actions.php" class="d-none">
+    <input type="hidden" name="action" value="toggle_offer">
+    <input type="hidden" name="idOferta" id="toggle-id-oferta">
 </form>

@@ -9,9 +9,10 @@ class Oferta
     private $fechaActualizacion;
     private $fechaFin;
     private $productosIds;
+    private $activa;
     public $producto_nombre; // Para vistas
 
-    public function __construct($idOferta, $nombre, $descuento, $fechaCreacion, $fechaActualizacion, $fechaFin, $productosIds = [])
+    public function __construct($idOferta, $nombre, $descuento, $fechaCreacion, $fechaActualizacion, $fechaFin, $productosIds = [], $activa = true)
     {
         $this->idOferta = $idOferta;
         $this->nombre = $nombre;
@@ -20,6 +21,7 @@ class Oferta
         $this->fechaActualizacion = $fechaActualizacion;
         $this->fechaFin = $fechaFin;
         $this->productosIds = is_array($productosIds) ? $productosIds : (empty($productosIds) ? [] : explode(',', $productosIds));
+        $this->activa = filter_var($activa, FILTER_VALIDATE_BOOLEAN);
     }
 
     /*********************************  GETTERS y SETTERS *******************************/
@@ -46,6 +48,12 @@ class Oferta
     public function getProductosIds(){
         return $this->productosIds;
     }
+    public function getActiva(){
+        return $this->activa;
+    }
+    public function setActiva($activa){
+        $this->activa = filter_var($activa, FILTER_VALIDATE_BOOLEAN);
+    }
 
     /********************************** METODOS *****************************************/
     /************************************************************************************/
@@ -69,7 +77,8 @@ class Oferta
                 $row->fecha_creacion,
                 $row->fecha_actualizacion,
                 $row->fechaFin,
-                $row->productos_ids
+                $row->productos_ids,
+                $row->activa ?? true
             );
             $oferta->producto_nombre = $row->producto_nombre;
             $ofertas[] = $oferta;
@@ -90,7 +99,8 @@ class Oferta
                 $row->fecha_creacion,
                 $row->fecha_actualizacion,
                 $row->fechaFin,
-                [$idProducto]
+                [$idProducto],
+                $row->activa ?? true
             );
         }
         return $ofertas;
@@ -98,8 +108,8 @@ class Oferta
 
     public function IngresarOferta(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("INSERT INTO ofertas(nombre, descuento, \"fechaFin\") VALUES (?, ?, ?)");
-        $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin]);
+        $stmt = $conn->prepare("INSERT INTO ofertas(nombre, descuento, \"fechaFin\", activa) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin, $this->activa ? 'true' : 'false']);
         $idOferta = $conn->lastInsertId();
         
         if ($idOferta && !empty($this->productosIds)) {
@@ -113,8 +123,8 @@ class Oferta
 
     public function ActualizarOferta(){
         $conn = BD::FloresNuria();
-        $stmt = $conn->prepare("UPDATE ofertas SET nombre=?, descuento=?, \"fechaFin\"=? WHERE id_oferta = ?");
-        $ex = $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin, $this->idOferta]);
+        $stmt = $conn->prepare("UPDATE ofertas SET nombre=?, descuento=?, \"fechaFin\"=?, activa=? WHERE id_oferta = ?");
+        $ex = $stmt->execute([$this->nombre, $this->descuento, $this->fechaFin, $this->activa ? 'true' : 'false', $this->idOferta]);
         
         if ($ex) {
             $stmtDel = $conn->prepare("DELETE FROM oferta_producto WHERE id_oferta = ?");
@@ -129,6 +139,12 @@ class Oferta
         }
         
         return $ex;
+    }
+
+    public static function toggleStatus($idOferta){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("UPDATE ofertas SET activa = NOT activa WHERE id_oferta = ?");
+        return $stmt->execute([$idOferta]);
     }
 
     public function EliminarOferta(){
