@@ -27,7 +27,6 @@ $breadcrumbItems = ['Dashboard'];
 if($currentPage !== 'dashboard'){
   $breadcrumbItems[] = $currentPageLabel;
 }
-<?php
 $userInitial = 'U';
 if (isset($_SESSION['empleado_nombre']) && !empty($_SESSION['empleado_nombre'])) {
   $userInitial = mb_strtoupper(mb_substr($_SESSION['empleado_nombre'], 0, 1, 'UTF-8'));
