@@ -1,4 +1,4 @@
-<main class="main">
+ <main class="main">
   <?php include __DIR__ . '/header.php'; ?>
   <section class="container">
     
