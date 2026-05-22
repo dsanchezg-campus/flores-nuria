@@ -57,12 +57,10 @@
                 }
             }
             
-            $highlightClass = $stock > 0 ? ' class="highlight"' : '';
-            
             // Pasamos los datos puros a JS, por eso usamos json_encode para escapar strings seguros
             $jsNombre = htmlspecialchars(json_encode($producto->getNombre()));
             
-            echo "<tr{$highlightClass}>";
+            echo "<tr>";
             echo "<td>{$id}</td>";
             echo "<td>{$nombre}{$ofertaInfo}</td>";
             echo "<td>" . number_format($precio_raw, 2) . " €</td>";
