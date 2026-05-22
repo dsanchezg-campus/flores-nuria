@@ -112,4 +112,26 @@ class Ticket
         $stmt->execute();
         return $stmt->rowCount() > 0;
     }
+
+    public function api_info(): string{
+        $std = new stdClass();
+        $std->idTicket = $this->idTicket;
+        $std->empleado = $this->empleado;
+        $std->cliente = $this->cliente;
+        $std->fechaCreacion = $this->fechaCreacion;
+        $std->totalVenta = $this->totalVenta;
+        $std->num_ticket = $this->num_ticket;
+        $std->BolsaCompra = $this->BolsaCompra;
+        return json_encode($std);
+
+    }
+
+    public static function api_getAllTickets(): string{
+        $tickets = Ticket::getTickets();
+        $json = array();
+        foreach ($tickets as $ticket) {
+            $json[] = $ticket->api_info();
+        }
+        return json_encode($json);
+    }
 }
