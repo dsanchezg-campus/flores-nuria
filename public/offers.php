@@ -80,7 +80,7 @@
           </section>
           <section class="flex-1">
             <label>Descuento (%) *</label>
-            <input type="number" step="0.01" name="descuento" id="edit-descuento-oferta" required>
+            <input type="number" step="0.01" name="descuento" id="edit-descuento-oferta" min="0" max="100" required>
           </section>
           <section class="flex-1">
             <label>Fecha Fin (Opcional)</label>
