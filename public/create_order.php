@@ -61,7 +61,7 @@
                 </select>
               </section>
               <section class="flex-1">
-                <input type="number" name="cantidades[]" placeholder="Cantidad" min="1">
+                <input type="number" name="cantidades[]" placeholder="Cantidad" min="0">
               </section>
               <section class="flex-0 align-self-center">
                 <button type="button" class="btn secondary" onclick="this.parentElement.parentElement.remove()">X</button>

@@ -23,15 +23,15 @@
           </section>
           <section class="flex-1">
             <label>Precio Base (€) *</label>
-            <input type="number" step="0.01" name="precio" required>
+            <input type="number" step="0.01" name="precio" min="0.01" required>
           </section>
           <section class="flex-1">
             <label>IVA (%)</label>
-            <input type="number" step="0.01" name="iva" value="21.00" required>
+            <input type="number" step="0.01" name="iva" min="0" max="100" value="21.00" required>
           </section>
           <section class="flex-1">
             <label>Stock Inicial</label>
-            <input type="number" name="stock" value="0">
+            <input type="number" name="stock" min="0" value="0">
           </section>
         </section>
 

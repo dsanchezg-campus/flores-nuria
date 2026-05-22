@@ -30,11 +30,11 @@
         <section class="row mt-4">
           <section class="flex-1">
             <label>Teléfono</label>
-            <input type="tel" name="telefono" placeholder="Ej: 600123456">
+            <input type="tel" name="telefono" placeholder="Ej: 600123456" maxlength="9" minlength="9">
           </section>
           <section class="flex-1">
             <label>Correo Electrónico</label>
-            <input type="email" name="correo" placeholder="Ej: contacto@viveroselsol.com">
+            <input type="email" name="correo" placeholder="Ej: [EMAIL_ADDRESS]">
           </section>
         </section>
 
