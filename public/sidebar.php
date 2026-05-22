@@ -16,10 +16,10 @@ function sidebarActive(string $slug, string $current): string {
       <li class="<?= sidebarActive('payments', $currentPage) ?>"><a href="?page=payments"><span class="icon"></span>Cobros/Pagos</a></li>
       <li class="<?= sidebarActive('schedule', $currentPage) ?>"><a href="?page=schedule"><span class="icon"></span>Agenda</a></li>
       <li class="<?= sidebarActive('products', $currentPage) ?>"><a href="?page=products"><span class="icon"></span>Productos</a></li>
-      <li class="<?= sidebarActive('offers', $currentPage) ?>"><a href="?page=offers"><span class="icon">🏷</span>Ofertas</a></li>
+      <li class="<?= sidebarActive('offers', $currentPage) ?>"><a href="?page=offers"><span class="icon"></span>Ofertas</a></li>
       <li class="<?= sidebarActive('orders', $currentPage) ?>"><a href="?page=orders"><span class="icon"></span>Pedidos</a></li>
       <li class="<?= sidebarActive('customers', $currentPage) ?>"><a href="?page=customers"><span class="icon"></span>Clientes</a></li>
-      <li class="<?= sidebarActive('suppliers', $currentPage) ?>"><a href="?page=suppliers"><span class="icon"></span>Proveedores</a></li>
+      <li class="<?= sidebarActive('supplie rs', $currentPage) ?>"><a href="?page=suppliers"><span class="icon"></span>Proveedores</a></li>
       <li class="<?= sidebarActive('employees', $currentPage) ?>"><a href="?page=employees"><span class="icon"></span>Empleados</a></li>
     </ul>
     <h4>Ventas</h4>
