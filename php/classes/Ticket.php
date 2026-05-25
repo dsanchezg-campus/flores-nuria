@@ -23,22 +23,22 @@ class Ticket
     /*********************************  GETTERS y SETTERS *******************************/
     /************************************************************************************/
 
-    public function getIdTicket()){
+    public function getIdTicket(){
         return $this->idTicket;
     }
-    public function getEmpleado()){
+    public function getEmpleado(){
         return $this->empleado;
     }
-    public function getCliente()){
+    public function getCliente(){
         return $this->cliente;
     }
-    public function getFechaCreacion()){
+    public function getFechaCreacion(){
         return $this->fechaCreacion;
     }
-    public function getTotalVenta()){
+    public function getTotalVenta(){
         return $this->totalVenta;
     }
-    public function getBolsaCompra()){
+    public function getBolsaCompra(){
         return $this->BolsaCompra;
     }
 
