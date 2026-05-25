@@ -91,10 +91,10 @@ usort($productChart, function ($a, $b) {
     </section>
 
     <section class="charts-grid">
-      <article class="panel chart-panel">
+      <!-- <article class="panel chart-panel">
         <h3>Ventas por mes</h3>
         <div id="sales-line-chart" class="chart-canvas"></div>
-      </article>
+      </article> -->
       <article class="panel chart-panel">
         <h3>Pedidos por estado</h3>
         <div id="orders-bar-chart" class="chart-canvas"></div>
