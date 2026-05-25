@@ -167,3 +167,12 @@ class Ticket
         );
     }
 }
+// Crear json de los tikets con sus productos
+    public function api_getTiketsVigentes(): string{
+        $tikets = Ticket::getTikets();
+        $json = array();
+        foreach ($tikets as $tikets) {
+            $json[] = $tikets->api_info_data();
+        }
+        return json_encode($json);
+    }
