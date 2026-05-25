@@ -8,7 +8,8 @@ class Producto
     private $stock;
     private $oferta;
     private $iva;
-    public function __construct($idProducto, $nombre, $precio, $stock, $oferta, $iva){
+    private $categoria;
+    public function __construct($idProducto, $nombre, $precio, $stock, $oferta, $iva, $categoria){
         $this->idProducto = $idProducto;
         $this->nombre = $nombre;
         $this->precio = $precio;
@@ -19,6 +20,7 @@ class Producto
         } else {
             $this->oferta = 0;
         }
+        $this->categoria = $categoria;
     }
 
     /*********************************  GETTERS y SETTERS *******************************/
@@ -41,6 +43,9 @@ class Producto
     }
     public function getIva(){
         return $this->iva;
+    }
+    public function getCategoria(){
+        return $this->categoria;
     }
     // Precio final con descuento
     public function getPrecioConIva(){
@@ -73,7 +78,8 @@ class Producto
                 $row->precioBase,
                 $row->stock,
                 $oferta,
-                $row->iva
+                $row->iva,
+                $row->categoria
             );
         }
         return $productos;
@@ -93,7 +99,8 @@ class Producto
                 $row->precioBase ?? $row->precio ?? 0,
                 $row->stock,
                 $oferta,
-                $row->iva
+                $row->iva,
+                $row->categoria
             );
         }
         return $productos;
@@ -111,7 +118,8 @@ class Producto
             $row->precio,
             $row->stock,
             $oferta,
-            $row->iva
+            $row->iva,
+            $row->categoria
         );
     }
 

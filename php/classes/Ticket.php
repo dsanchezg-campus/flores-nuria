@@ -10,7 +10,8 @@ class Ticket
     private $num_ticket;
     private $BolsaCompra;
 
-    public function __construct($idTicket, $empleado, $cliente, $fechaCreacion, $totalVenta, $num_ticket, $BolsaCompra){
+    public function __construct($idTicket, $empleado, $cliente, $fechaCreacion, $totalVenta, $num_ticket, $BolsaCompra)
+    {
         $this->idTicket = $idTicket;
         $this->empleado = $empleado;
         $this->cliente = $cliente;
@@ -23,22 +24,33 @@ class Ticket
     /*********************************  GETTERS y SETTERS *******************************/
     /************************************************************************************/
 
-    public function getIdTicket(){
+    public function getIdTicket()
+    {
         return $this->idTicket;
     }
-    public function getEmpleado(){
+
+    public function getEmpleado()
+    {
         return $this->empleado;
     }
-    public function getCliente(){
+
+    public function getCliente()
+    {
         return $this->cliente;
     }
-    public function getFechaCreacion(){
+
+    public function getFechaCreacion()
+    {
         return $this->fechaCreacion;
     }
-    public function getTotalVenta(){
+
+    public function getTotalVenta()
+    {
         return $this->totalVenta;
     }
-    public function getBolsaCompra(){
+
+    public function getBolsaCompra()
+    {
         return $this->BolsaCompra;
     }
 
@@ -66,7 +78,8 @@ class Ticket
         return $tickets;
     }
 
-    public function IngresarTicket(){
+    public function IngresarTicket()
+    {
         $conn = BD::FloresNuria();
         try {
             $stmt = $conn->prepare("INSERT INTO venta(precio, fecha, num_venta, id_cliente, id_empleado) VALUES (:precio, :fecha, :num_venta, :id_cliente, :id_empleado)");
@@ -78,12 +91,13 @@ class Ticket
             $stmt->execute();
             $this->BolsaCompra->IngresarVentaProductos($this);
             return $stmt->rowCount() > 0;
-        }catch (Exception $e){
+        } catch (Exception $e) {
             throw new Exception($e);
         }
     }
 
-    public function ActualizarTicket(): bool{
+    public function ActualizarTicket(): bool
+    {
         $conn = BD::FloresNuria();
         try {
             if ($this->BolsaCompra->IngresarVentaProductos($this)) {
@@ -95,15 +109,16 @@ class Ticket
                 $stmt->bindParam(":id_venta", $this->idTicket);
                 $stmt->execute();
                 return $stmt->rowCount() > 0;
-            } else{
+            } else {
                 return false;
             }
-        } catch (Exception $e){
+        } catch (Exception $e) {
             throw new Exception($e);
         }
     }
 
-    public function EliminarTicket(): bool{
+    public function EliminarTicket(): bool
+    {
         $conn = BD::FloresNuria();
         $stmt = $conn->prepare("DELETE FROM venta_producto WHERE id_venta = :id_venta");
         $stmt->bindParam(":id_venta", $this->idTicket);
@@ -115,30 +130,31 @@ class Ticket
     }
 
     /* Retorna los datos crudos para evitar dobles codificaciones JSON */
-    public function api_info_data(): array 
+    public function api_info_data(): array
     {
         return [
-            'idTicket'      => $this->idTicket,
-            'empleado'      => $this->empleado,
-            'cliente'       => $this->cliente,
+            'idTicket' => $this->idTicket,
+            'empleado' => $this->empleado,
+            'cliente' => $this->cliente,
             'fechaCreacion' => $this->fechaCreacion,
-            'totalVenta'    => $this->totalVenta,
-            'num_ticket'    => $this->num_ticket,
-            'BolsaCompra'   => $this->BolsaCompra,
+            'totalVenta' => $this->totalVenta,
+            'num_ticket' => $this->num_ticket,
+            'BolsaCompra' => $this->BolsaCompra,
         ];
     }
 
-    public function api_info(): string 
+    public function api_info(): string
     {
         return json_encode($this->api_info_data());
     }
 
-    public static function api_getAllTickets(): string{
+    public static function api_getAllTickets(): string
+    {
         $tickets = Ticket::getTickets();
         $json = array();
         foreach ($tickets as $ticket) {
             // Usamos el array crudo para que json_encode final no rompa el formato
-            $json[] = $ticket->api_info_data(); 
+            $json[] = $ticket->api_info_data();
         }
         return json_encode($json);
     }
@@ -146,10 +162,10 @@ class Ticket
     /**
      * NUEVO MÉTODO: Recibe un JSON, lo decodifica y devuelve una instancia de Ticket
      */
-    public static function api_decode(string $jsonString): ?self 
+    public static function api_decode(string $jsonString): ?self
     {
         $data = json_decode($jsonString, true);
-        
+
         // Si el JSON es inválido, retornamos null
         if (!$data) {
             return null;
@@ -166,13 +182,15 @@ class Ticket
             $data['BolsaCompra'] ?? null
         );
     }
-}
-// Crear json de los tikets con sus productos
-    public function api_getTiketsVigentes(): string{
-        $tikets = Ticket::getTikets();
+
+    // Crear json de los tikets con sus productos
+    public function api_getTiketsVigentes(): string
+    {
+        $tikets = Ticket::getTickets();
         $json = array();
         foreach ($tikets as $tikets) {
             $json[] = $tikets->api_info_data();
         }
         return json_encode($json);
     }
+}
