@@ -53,7 +53,7 @@
                 $ofertaActiva = $ofertasProd[0];
                 $fechaFin = $ofertaActiva->getFechaFin();
                 if (empty($fechaFin) || strtotime($fechaFin) >= strtotime(date('Y-m-d'))) {
-                    $ofertaInfo = '<¡br><span class="pill green px-3-py-1 rounded-sm text-sm fw-bold">Oferta: -' . $ofertaActiva->getDescuento() . '%</span>';
+                    $ofertaInfo = '<span class="pill green px-3-py-1 rounded-sm text-sm fw-bold">Oferta: -' . $ofertaActiva->getDescuento() . '%</span>';
                 }
             }
             
