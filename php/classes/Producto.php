@@ -8,7 +8,7 @@ class Producto
     private $stock;
     private $oferta;
     private $iva;
-    public function __construct($idProducto, $nombre, $precio, $stock, $oferta, $iva = 21.00){
+    public function __construct($idProducto, $nombre, $precio, $stock, $oferta, $iva){
         $this->idProducto = $idProducto;
         $this->nombre = $nombre;
         $this->precio = $precio;
@@ -42,13 +42,13 @@ class Producto
     public function getIva(){
         return $this->iva;
     }
+    // Precio final con descuento
     public function getPrecioConIva(){
         $precioDesc = $this->precio;
         if (!empty($this->oferta)) {
             $ofertaActiva = $this->oferta[0];
             $fechaFin = $ofertaActiva->getFechaFin();
-            // Aplicar solo si no tiene fecha fin o la fecha fin es hoy o futura
-            if (empty($fechaFin) || strtotime($fechaFin) >= strtotime(date('Y-m-d'))) {
+            if (empty($fechaFin) || strtotime($fechaFin) >= strtotime(date('Y-m-d')) || $ofertaActiva->getEstado() == 1) {
                 $descuento = $ofertaActiva->getDescuento();
                 $precioDesc = $precioDesc * (1 - ($descuento / 100));
             }
