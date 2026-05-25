@@ -12,7 +12,7 @@ class Oferta
     private $activa;
     public $producto_nombre; // Para vistas
 
-    public function __construct($idOferta, $nombre, $descuento, $fechaCreacion, $fechaActualizacion, $fechaFin, $productosIds = [], $activa = true)
+    public function __construct($idOferta, $nombre, $descuento, $fechaCreacion, $fechaActualizacion, $fechaFin, $productosIds = [], $activa)
     {
         $this->idOferta = $idOferta;
         $this->nombre = $nombre;
@@ -21,7 +21,7 @@ class Oferta
         $this->fechaActualizacion = $fechaActualizacion;
         $this->fechaFin = $fechaFin;
         $this->productosIds = is_array($productosIds) ? $productosIds : (empty($productosIds) ? [] : explode(',', $productosIds));
-        $this->activa = filter_var($activa, FILTER_VALIDATE_BOOLEAN);
+        $this->activa = $activa;
     }
 
     /*********************************  GETTERS y SETTERS *******************************/
@@ -78,7 +78,7 @@ class Oferta
                 $row->fecha_actualizacion,
                 $row->fechaFin,
                 $row->productos_ids,
-                $row->activa ?? true
+                $row->activa
             );
             $oferta->producto_nombre = $row->producto_nombre;
             $ofertas[] = $oferta;
@@ -99,8 +99,8 @@ class Oferta
                 $row->fecha_creacion,
                 $row->fecha_actualizacion,
                 $row->fechaFin,
-                [$idProducto],
-                $row->activa ?? true
+                $idProducto,
+                $row->activa
             );
         }
         return $ofertas;
