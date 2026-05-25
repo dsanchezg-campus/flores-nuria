@@ -9,6 +9,7 @@ class Ticket
     private $totalVenta;
     private $num_ticket;
     private $BolsaCompra;
+
     public function __construct($idTicket, $empleado, $cliente, $fechaCreacion, $totalVenta, $num_ticket, $BolsaCompra){
         $this->idTicket = $idTicket;
         $this->empleado = $empleado;
@@ -22,22 +23,22 @@ class Ticket
     /*********************************  GETTERS y SETTERS *******************************/
     /************************************************************************************/
 
-    public function getIdTicket(){
+    public function getIdTicket()){
         return $this->idTicket;
     }
-    public function getEmpleado(){
+    public function getEmpleado()){
         return $this->empleado;
     }
-    public function getCliente(){
+    public function getCliente()){
         return $this->cliente;
     }
-    public function getFechaCreacion(){
+    public function getFechaCreacion()){
         return $this->fechaCreacion;
     }
-    public function getTotalVenta(){
+    public function getTotalVenta()){
         return $this->totalVenta;
     }
-    public function getBolsaCompra(){
+    public function getBolsaCompra()){
         return $this->BolsaCompra;
     }
 
@@ -113,25 +114,56 @@ class Ticket
         return $stmt->rowCount() > 0;
     }
 
-    public function api_info(): string{
-        $std = new stdClass();
-        $std->idTicket = $this->idTicket;
-        $std->empleado = $this->empleado;
-        $std->cliente = $this->cliente;
-        $std->fechaCreacion = $this->fechaCreacion;
-        $std->totalVenta = $this->totalVenta;
-        $std->num_ticket = $this->num_ticket;
-        $std->BolsaCompra = $this->BolsaCompra;
-        return json_encode($std);
+    /* Retorna los datos crudos para evitar dobles codificaciones JSON */
+    public function api_info_data(): array 
+    {
+        return [
+            'idTicket'      => $this->idTicket,
+            'empleado'      => $this->empleado,
+            'cliente'       => $this->cliente,
+            'fechaCreacion' => $this->fechaCreacion,
+            'totalVenta'    => $this->totalVenta,
+            'num_ticket'    => $this->num_ticket,
+            'BolsaCompra'   => $this->BolsaCompra,
+        ];
+    }
 
+    public function api_info(): string 
+    {
+        return json_encode($this->api_info_data());
     }
 
     public static function api_getAllTickets(): string{
         $tickets = Ticket::getTickets();
         $json = array();
         foreach ($tickets as $ticket) {
-            $json[] = $ticket->api_info();
+            // Usamos el array crudo para que json_encode final no rompa el formato
+            $json[] = $ticket->api_info_data(); 
         }
         return json_encode($json);
+    }
+
+    /**
+     * NUEVO MÉTODO: Recibe un JSON, lo decodifica y devuelve una instancia de Ticket
+     */
+    public static function api_decode(string $jsonString): ?self 
+    {
+        $data = json_decode($jsonString, true);
+        
+        // Si el JSON es inválido, retornamos null
+        if (!$data) {
+            return null;
+        }
+
+        // Retornamos la nueva instancia mapeando las claves del JSON
+        return new self(
+            $data['idTicket'] ?? null,
+            $data['empleado'] ?? null,
+            $data['cliente'] ?? null,
+            $data['fechaCreacion'] ?? null,
+            $data['totalVenta'] ?? null,
+            $data['num_ticket'] ?? null,
+            $data['BolsaCompra'] ?? null
+        );
     }
 }

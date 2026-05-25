@@ -28,7 +28,7 @@ if (isset($_SESSION['msg'])) {
   <script src="js/menu.js" defer></script>
 </head>
 <body>
-  <div class="app">
+  <main class="app">
     <?php
       $page = $_GET['page'] ?? 'dashboard';
       include __DIR__ . '/public/sidebar.php';
@@ -40,7 +40,6 @@ if (isset($_SESSION['msg'])) {
         include __DIR__ . '/public/dashboard.php';
       }
     ?>
-  </div>
-  
+  </main>
 </body>
 </html>
