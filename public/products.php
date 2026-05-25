@@ -22,6 +22,7 @@
           <tr>
             <th>ID</th>
             <th>Nombre</th>
+            <th>Oferta</th>
             <th>Precio Base</th>
             <th>IVA</th>
             <th>Precio Final</th>
@@ -62,7 +63,8 @@
             
             echo "<tr>";
             echo "<td>{$id}</td>";
-            echo "<td>{$nombre}{$ofertaInfo}</td>";
+            echo "<td>{$nombre}</td>";
+            echo "<td>" . $ofertaInfo . "</td>";
             echo "<td>" . number_format($precio_raw, 2) . " €</td>";
             echo "<td>" . number_format($iva, 2) . " %</td>";
             echo "<td>" . number_format($precio_final, 2) . " €</td>";
