@@ -46,12 +46,13 @@ class Producto
     public function getPrecioConIva(){
         $precioDesc = $this->precio;
         if (!empty($this->oferta)) {
-            $ofertaActiva = $this->oferta[0];
-            $fechaFin = $ofertaActiva->getFechaFin();
-            if (empty($fechaFin) || strtotime($fechaFin) >= strtotime(date('Y-m-d')) || $ofertaActiva->getEstado() == 1) {
-                $descuento = $ofertaActiva->getDescuento();
-                $precioDesc = $precioDesc * (1 - ($descuento / 100));
+            $descuento = 0;
+            foreach ($this->oferta as $oferta) {
+                if ($oferta->getActiva() && $oferta->getDescuento() > $descuento) {
+                    $descuento = $oferta->getDescuento();
+                }
             }
+            $precioDesc = $precioDesc * (1 - ($descuento / 100));
         }
         return $precioDesc * (1 + ($this->iva / 100));
     }
@@ -69,7 +70,7 @@ class Producto
             $productos[] = new Producto(
                 $row->id_producto,
                 $row->nombre,
-                $row->precioBase ?? $row->precio ?? 0, // Fallback if property names differ
+                $row->precioBase,
                 $row->stock,
                 $oferta,
                 $row->iva
