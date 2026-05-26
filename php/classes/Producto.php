@@ -2,13 +2,13 @@
 
 class Producto
 {
-    private $idProducto;
-    private $nombre;
-    private $precio;
-    private $stock;
-    private $oferta;
-    private $iva;
-    private $categoria;
+    protected $idProducto;
+    protected $nombre;
+    protected $precio;
+    protected $stock;
+    protected $oferta;
+    protected $iva;
+    protected $categoria;
     public function __construct($idProducto, $nombre, $precio, $stock, $oferta, $iva, $categoria){
         $this->idProducto = $idProducto;
         $this->nombre = $nombre;
