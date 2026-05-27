@@ -24,7 +24,8 @@
                     <td><?= $venta->getNumTicket(); ?></td>
                     <td><?= $venta->getFechaCreacion(); ?></td>
                     <td><?= $venta->getTotalVenta(); ?></td>
-                    <td><?= $venta->getEmpleado()->getNombre(); ?></td>
+                    <?php $empleado = Empleado::getEmpleadoById($venta->getEmpleado()); ?>
+                    <td><?= $empleado->getNombre(); ?></td>
                     <td>
                         <button class="btn">Ver Info</button>
                     </td>
