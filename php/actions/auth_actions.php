@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../clases.php';
+require_once '../../autoloader.php';
 session_start();
 
 $action = $_REQUEST['action'] ?? '';
