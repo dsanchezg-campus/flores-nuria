@@ -9,5 +9,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <form method="POST" style="display:inline;">
-    <button type="submit" class="btn">Descargar Tickets (JSON)</button>
+    <button type="submit" class="btn">Crear/Actualizar Tickets (JSON)</button>
 </form>
