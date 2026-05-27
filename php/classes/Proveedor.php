@@ -7,6 +7,14 @@ class Proveedor
     private $direccion;
     private $telefono;
     private $correo;
+
+    /**
+     * @param $idProveedor
+     * @param $nombre
+     * @param $direccion
+     * @param $telefono
+     * @param $correo
+     */
     public function __construct($idProveedor, $nombre, $direccion, $telefono, $correo){
         $this->idProveedor = $idProveedor;
         $this->nombre = $nombre;
@@ -37,6 +45,10 @@ class Proveedor
     /*********************************  METODOS *****************************************/
     /************************************************************************************/
 
+    /**
+     * Devuelve todos los Proveedores de la bd
+     * @return array
+     */
     public static function getProveedores(): array {
         $conn = BD::FloresNuria();
         $conn = $conn->query("SELECT * FROM proveedor");
@@ -53,6 +65,11 @@ class Proveedor
         return $proveedores;
     }
 
+    /**
+     * Devuelve Proveedores segun el nombre
+     * @param $busqueda string texto para buscar
+     * @return array
+     */
     public static function buscarProveedores($busqueda): array {
         $conn = BD::FloresNuria();
         $stmt = $conn->prepare("SELECT * FROM proveedor WHERE nombre ILIKE ?");
@@ -70,6 +87,10 @@ class Proveedor
         return $proveedores;
     }
 
+    /**
+     * Inserta un nuevo proveedor en la BD
+     * @return bool
+     */
     public function IngresarProveedor(){
         $conn = BD::FloresNuria();
         $stmt = $conn->prepare("INSERT INTO proveedor(nombre, direccion, telefono, correo) VALUES (:nombre, :direccion, :telefono, :correo)");
@@ -81,6 +102,10 @@ class Proveedor
         return $stmt->rowCount() > 0;
     }
 
+    /**
+     * Elimina al Proveedor de la BD
+     * @return bool
+     */
     public function EliminarProveedor(){
         $conn = BD::FloresNuria();
         $stmt = $conn->prepare("DELETE FROM proveedor WHERE id_proveedor = :id_proveedor");
@@ -89,6 +114,10 @@ class Proveedor
         return $stmt->rowCount() > 0;
     }
 
+    /**
+     * Actualiza los datos del Proveedor en la BD
+     * @return bool
+     */
     public function ActualizarProveedor(){
         $conn = BD::FloresNuria();
         $stmt = $conn->prepare("UPDATE proveedor SET nombre = :nombre, direccion = :direccion, telefono = :telefono, correo = :correo WHERE id_proveedor = :id_proveedor");
