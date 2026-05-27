@@ -2,7 +2,9 @@
 <?php
 // Manejar descarga de JSON
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo Ticket::api_getAllTickets();
+    $tickets = Ticket::api_getAllTickets();
+    file_put_contents("../json/tickets.json", $tickets);
+    echo $tickets;
     exit;
 }
 ?>
