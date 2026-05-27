@@ -34,8 +34,7 @@ if (isset($_SESSION['msg'])) {
       // __DIR__ es la ruta absoluta del directorio actual, lo que evita problemas attm:D
       include __DIR__ . '/public/sidebar.php';
 //      Paginas permitidas para evitar fallos
-      $allowedPages = ['dashboard', 'products', 'employees', 'reports', 'payments', 'schedule', 'customers', 'suppliers', 'invoices', 'deliveries', 'budgets', 'create_product', 'create_supplier', 'orders', 'create_order', 'offers','create_offer', 'create_tiket', 'create_payment'];
-      if(in_array($page, $allowedPages, true)){
+      if(in_array($page, true)){
         include __DIR__ . '/public/' . $page . '.php';
       } else {
         include __DIR__ . '/public/dashboard.php';
