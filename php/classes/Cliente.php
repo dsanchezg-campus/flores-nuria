@@ -1,16 +1,11 @@
 <?php
 
-class Cliente
+class Cliente extends Persona
 {
     private $idCliente;
-    private $nombre;
-    private $telefono;
-    private $correo;
+
     public function __construct($idCliente, $nombre, $telefono, $correo){
-        $this->idCliente = $idCliente;
-        $this->nombre = $nombre;
-        $this->telefono = $telefono;
-        $this->correo = $correo;
+        parent::__construct($idCliente, $nombre, $telefono, $correo);
     }
 
     /*********************************  GETTERS y SETTERS *******************************/
@@ -32,6 +27,12 @@ class Cliente
     /*********************************  METODOS *****************************************/
     /************************************************************************************/
 
-
+    public static function getClienteById($idCliente){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT * FROM cliente WHERE id_cliente = ?");
+        $stmt->execute([$idCliente]);
+        $row = $stmt->fetch(PDO::FETCH_OBJ);
+        return new Cliente($row->id_cliente, $row->nombre, $row->telefono, $row->correo);
+    }
 
 }
