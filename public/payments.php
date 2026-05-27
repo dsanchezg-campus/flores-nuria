@@ -3,7 +3,7 @@
     <section class="container">
         <section class="panel">
             <h2>Cobros/pagos</h2>
-            <p>Esta es una página de ejemplo para la sección de cobros/pagos.  <a href="index.php?page=create_payment"><button>Registrar venta</button></a></p>
+            <p>Esta es una página de ejemplo para la sección de cobros/pagos.  <a href="index.php?page=create_payment"><button>Registrar venta</button></a><a href="index.php?page=create_tiket"><button>Exportar Tickets</button></a></p>
 
             <?php
                 $ventas = Ticket::getTickets();
