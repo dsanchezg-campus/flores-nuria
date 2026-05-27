@@ -18,7 +18,7 @@
     ?>
 
     <section class="form">
-      <form method="POST" action="php/actions/payment_actions.php">
+      <form method="POST" action="php/actions/payment_action.php">
         <input type="hidden" name="action" value="create_payment">
         <section class="row">
           <section class="flex-2">
