@@ -15,17 +15,21 @@
                     <th>Fecha de venta</th>
                     <th>Total</th>
                     <th>Empleado</th>
+                    <th>Cliente</th>
                     <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($ventas as $venta) { ?>
+                <?php foreach ($ventas as $venta) {
+                    $empleado = Empleado::getEmpleadoById($venta->getEmpleado());
+                    $cliente = Cliente::getClienteById($venta->getCliente());
+                    ?>
                 <tr>
                     <td><?= $venta->getNumTicket(); ?></td>
                     <td><?= $venta->getFechaCreacion(); ?></td>
                     <td><?= $venta->getTotalVenta(); ?></td>
-                    <?php $empleado = Empleado::getEmpleadoById($venta->getEmpleado()); ?>
                     <td><?= $empleado->getNombre(); ?></td>
+                    <td><?= $cliente->getNombre(); ?></td>
                     <td>
                         <button class="btn">Ver Info</button>
                     </td>

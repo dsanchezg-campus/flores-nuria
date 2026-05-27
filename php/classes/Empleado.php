@@ -1,17 +1,12 @@
 <?php
 
-class Empleado{
+class Empleado extends Cliente{
     private $idEmpleado;
-    private $nombre;
     private $puesto;
-    private $telefono;
-    private $correo;
     public function __construct($idEmpleado, $nombre, $puesto, $telefono, $correo){
+        parent::__construct($idEmpleado, $nombre, $telefono, $correo);
         $this->idEmpleado = $idEmpleado;
-        $this->nombre = $nombre;
         $this->puesto = $puesto;
-        $this->telefono = $telefono;
-        $this->correo = $correo;
     }
 
     /*********************************  GETTERS y SETTERS *******************************/
