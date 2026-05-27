@@ -13,7 +13,7 @@ function sidebarActive(string $slug, string $current): string {
     <ul>
       <li class="<?= sidebarActive('dashboard', $currentPage) ?>"><a href="?page=dashboard">Dashboard</a></li>
       <li class="<?= sidebarActive('reports', $currentPage) ?>"><a href="?page=reports">Informes</a></li>
-      <!-- <li class="<?= sidebarActive('payments', $currentPage) ?>"><a href="?page=payments">Cobros/Pagos</a></li> -->
+       <li class="<?= sidebarActive('payments', $currentPage) ?>"><a href="?page=payments">Cobros/Pagos</a></li>
       <!-- <li class="<?= sidebarActive('schedule', $currentPage) ?>"><a href="?page=schedule">Agenda</a></li> -->
       <li class="<?= sidebarActive('products', $currentPage) ?>"><a href="?page=products">Productos</a></li>
       <li class="<?= sidebarActive('offers', $currentPage) ?>"><a href="?page=offers">Ofertas</a></li>

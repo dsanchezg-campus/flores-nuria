@@ -54,6 +54,10 @@ class Ticket
         return $this->BolsaCompra;
     }
 
+    public function getNumTicket(){
+        return $this->num_ticket;
+    }
+
     /*********************************  METODOS *****************************************/
     /************************************************************************************/
 
@@ -160,7 +164,7 @@ class Ticket
     }
 
     /**
-     * NUEVO MÉTODO: Recibe un JSON, lo decodifica y devuelve una instancia de Ticket
+     * NUEVO METODO: Recibe un JSON, lo decodifica y devuelve una instancia de Ticket
      */
     public static function api_decode(string $jsonString): ?self
     {

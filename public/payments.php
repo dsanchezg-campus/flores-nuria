@@ -3,7 +3,35 @@
     <section class="container">
         <section class="panel">
             <h2>Cobros/pagos</h2>
-            <p>Esta es una página de ejemplo para la sección de cobros/pagos.</p>
+            <p>Esta es una página de ejemplo para la sección de cobros/pagos.  <a href="index.php?page=create_payment"><button>Registrar venta</button></a></p>
+
+            <?php
+                $ventas = Ticket::getTickets();
+            ?>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Nº venta</th>
+                    <th>Fecha de venta</th>
+                    <th>Total</th>
+                    <th>Empleado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($ventas as $venta) { ?>
+                <tr>
+                    <td><?= $venta->getNumTicket(); ?></td>
+                    <td><?= $venta->getFechaCreacion(); ?></td>
+                    <td><?= $venta->getTotalVenta(); ?></td>
+                    <td><?= $venta->getEmpleado()->getNombre(); ?></td>
+                    <td>
+                        <button class="btn">Ver Info</button>
+                    </td>
+                </tr>
+                <?php } ?>
+                </tbody>
+            </table>
         </section>
         <footer class="footer">© 2026 Flores Nuria · Empleados</footer>
     </section>
