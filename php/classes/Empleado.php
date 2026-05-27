@@ -94,4 +94,12 @@ class Empleado{
         }
         session_destroy();
     }
+
+    public static function getEmpleadoById($idEmpleado){
+        $db = BD::FloresNuria();
+        $stmt = $db->prepare("SELECT * FROM empleado WHERE id_empleado = ?");
+        $stmt->execute([$idEmpleado]);
+        $row = $stmt->fetch(PDO::FETCH_OBJ);
+        return new Empleado($row->id_empleado, $row->nombre, $row->puesto, $row->telefono, $row->correo);
+    }
 }

@@ -75,7 +75,7 @@ class Ticket
                 $row->id_cliente,
                 $row->fecha,
                 $row->precio,
-                $row->num_ticket,
+                $row->num_venta,
                 $bolsa_compra
             );
         }
@@ -192,8 +192,8 @@ class Ticket
     {
         $tikets = Ticket::getTickets();
         $json = array();
-        foreach ($tikets as $tikets) {
-            $json[] = $tikets->api_info_data();
+        foreach ($tikets as $tiket) {
+            $json[] = $tiket->api_info_data();
         }
         return json_encode($json);
     }
