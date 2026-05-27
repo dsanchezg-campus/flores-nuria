@@ -78,10 +78,20 @@ class Empleado{
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        unset($_SESSION['empleado_id']);
-        unset($_SESSION['empleado_nombre']);
-        unset($_SESSION['empleado_correo']);
-        unset($_SESSION['empleado_puesto']);
+        session_unset();
+        // Borrar la cookie de sesión (opcional pero recomendable)
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),     // Nombre de la cookie (por defecto PHPSESSID)
+                '',                 // Valor vacío
+                time() - 42000,     // Expira en el pasado
+                $params["path"],    // Ruta donde la cookie es válida
+                $params["domain"],  // Dominio donde la cookie es válida
+                $params["secure"],  // Solo enviar por HTTPS si es true
+                $params["httponly"] // Solo accesible vía HTTP (no por JavaScript)
+            );
+        }
         session_destroy();
     }
 }
