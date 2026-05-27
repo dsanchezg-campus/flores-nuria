@@ -13,13 +13,22 @@
     <h3 class="mt-5 mb-3">Crear Nuevo Pago</h3>
     <?php echo $mensaje; ?>
     
+    <?php
+    $pedidos = Pedido::getPedidos();
+    ?>
+
     <section class="form">
       <form method="POST" action="php/actions/payment_actions.php">
         <input type="hidden" name="action" value="create_payment">
         <section class="row">
           <section class="flex-2">
-            <label>Pedido (ID) *</label>
-            <input type="text" name="pedido_id" placeholder="Ej: 123" required>
+            <label>Pedido *</label>
+            <select name="pedido_id" required>
+              <option value="">-- Seleccionar Pedido --</option>
+              <?php foreach($pedidos as $p): ?>
+                <option value="<?= htmlspecialchars($p->getIdPedido(), ENT_QUOTES, 'UTF-8') ?>">#<?= htmlspecialchars($p->getIdPedido(), ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($p->getFechaCreacion(), ENT_QUOTES, 'UTF-8') ?> - <?= number_format($p->getTotalPedido(), 2) ?>€</option>
+              <?php endforeach; ?>
+            </select>
           </section>
           <section class="flex-2">
             <label>Cliente</label>
