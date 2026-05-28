@@ -29,18 +29,18 @@
             <select name="pedido_id" id="select-create-prod" required>
               <option value="">-- Seleccionar Producto --</option>
               <?php foreach($productos as $p): ?>
-                <option value="<?= htmlspecialchars($p->getIdProducto(), ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($p->getNombre(), ENT_QUOTES, 'UTF-8') ?> - <?= $p->getStock() ?></option>
+                <option value="<?= htmlspecialchars($p->getIdProducto(), ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($p->getNombre(), ENT_QUOTES, 'UTF-8'); ?> - <?= $p->getStock(); ?></option>
               <?php endforeach; ?>
             </select>
           </section>
 
           <section class="flex-2">
             <label>Cliente</label>
-            <input type="text" id="search-client" name="cliente" placeholder="Nombre del cliente" onkeyup="filterSelect('client')" >
-              <select name="cliente_id" id="select-client" required>
+            <input type="text" id="search-filter-client" placeholder="Nombre del cliente" onkeyup="filterSelect('client')" class="flex-1 px-3-py-1 border-base rounded-sm">
+              <select name="cliente_id" id="select-filter-client" required>
                   <option value="">-- Seleccionar Cliente --</option>
                   <?php foreach($clientes as $c): ?>
-                  <option value="<?= htmlspecialchars($c->getIdCliente(), ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($c->getNombre(), ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($c->getCorreo()) ?? "" ?></option>
+                    <option value="<?= htmlspecialchars($c->getIdCliente(), ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($c->getNombre(), ENT_QUOTES, 'UTF-8'); ?> - <?= htmlspecialchars($c->getCorreo() ?? ""); ?></option>
                   <?php endforeach; ?>
               </select>
           </section>

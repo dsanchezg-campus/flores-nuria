@@ -63,7 +63,7 @@
             echo "<tr>";
             echo "<td>{$nombre}</td>";
             ?>
-            <td><?php if(isset($ofertaActiva) && $ofertaActiva->esActiva()){ echo $ofertaInfo; } else{ echo "Sin oferta"; } ?> </td>
+            <td><?php if(isset($ofertaActiva) && $ofertaActiva->getActiva()){ echo $ofertaInfo; } else{ echo "Sin oferta activa"; } ?> </td>
           <?php
             echo "<td>" . number_format($precio_raw, 2) . " €</td>";
             echo "<td>" . number_format($iva, 2) . " %</td>";

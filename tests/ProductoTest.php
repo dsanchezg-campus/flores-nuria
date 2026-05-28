@@ -4,8 +4,14 @@ use PHPUnit\Framework\TestCase;
 
 class ProductoTest extends TestCase
 {
-    public function testProducto(){
-        $suma = 5;
-        $this->assertEquals($suma, 5);
+    public function testProducto(): void{
+        $productos = Producto::getProductos();
+        $this->assertIsArray($productos);
+//        $this->assertNotEmpty($productos);
+
+        foreach ($productos as $producto) {
+//            $this->assertInstanceOf(Producto::class, $producto);
+            $this->assertIsString($producto->getNombre());
+        }
     }
 }

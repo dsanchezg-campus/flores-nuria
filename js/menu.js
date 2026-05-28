@@ -92,27 +92,24 @@ function editSupplier(id, nombre, direccion, telefono, correo) {
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function filterSelect(type) {
-    let searchValue = document.getElementById('search-' + type).value.toLowerCase();
-    let selectElement = document.getElementById('select-' + type);
-    let options = selectElement.options;
+    const searchValue = document.getElementById('search-filter-' + type).value.toLowerCase();
+    const selectElement = document.getElementById('select-filter-' + type);
+    const options = selectElement.options;
 
     for (let i = 0; i < options.length; i++) {
-        let option = options[i];
-        let text = option.text.toLowerCase();
+        const text = options[i].text.toLowerCase();
 
         // Si es la opción por defecto ("-- Seleccionar --"), la dejamos siempre visible
-        if (option.value === "") {
-            option.hidden = false;
+        if (options[i].value === "") {
+            options[i].style.display = "";
             continue;
         }
 
         // Usamos hidden en lugar de style display para mejor compatibilidad
         if (text.includes(searchValue)) {
-            option.hidden = false;
-            option.style.display = ""; // Por si acaso para navegadores viejos
+            options[i].style.display = ""; // Por si acaso para navegadores viejos
         } else {
-            option.hidden = true;
-            option.style.display = "none";
+            options[i].style.display = "none";
         }
     }
 }

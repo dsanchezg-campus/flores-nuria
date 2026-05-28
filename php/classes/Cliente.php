@@ -32,7 +32,7 @@ class Cliente extends Persona
         $stmt = $conn->prepare("SELECT * FROM cliente WHERE id_cliente = ?");
         $stmt->execute([$idCliente]);
         $row = $stmt->fetch(PDO::FETCH_OBJ);
-        return new Cliente($row->id_cliente, $row->nombre, $row->telefono, $row->correo);
+        return new Cliente($row->id_cliente, $row->nombre, $row->telefono, $row->mail);
     }
 
     public static function getClientes(){
@@ -41,7 +41,7 @@ class Cliente extends Persona
         $stmt->execute();
         $clientes = array();
         while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
-            $clientes[] = new Cliente($row->id_cliente, $row->nombre, $row->telefono, $row->correo);
+            $clientes[] = new Cliente($row->id_cliente, $row->nombre, $row->telefono, $row->mail);
         }
         return $clientes;
     }

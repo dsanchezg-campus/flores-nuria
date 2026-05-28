@@ -12,7 +12,7 @@ class Oferta
     private $activa;
     public $producto_nombre; // Para vistas
 
-    public function __construct($idOferta, $nombre, $descuento, $fechaCreacion, $fechaActualizacion, $fechaFin, $productosIds = [], $activa)
+    public function __construct($idOferta, $nombre, $descuento, $fechaCreacion, $fechaActualizacion, $fechaFin, $productosIds, $activa)
     {
         $this->idOferta = $idOferta;
         $this->nombre = $nombre;
@@ -20,7 +20,7 @@ class Oferta
         $this->fechaCreacion = $fechaCreacion;
         $this->fechaActualizacion = $fechaActualizacion;
         $this->fechaFin = $fechaFin;
-        $this->productosIds = is_array($productosIds) ? $productosIds : (empty($productosIds) ? [] : explode(',', $productosIds));
+        $this->productosIds = $productosIds;
         $this->activa = $activa;
     }
 

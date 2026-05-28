@@ -25,7 +25,7 @@ if (isset($_SESSION['msg'])) {
   <title>Floristería - Panel</title>
   <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="img/logo_fondo_blanco.jpg">
-  <script src="js/menu.js" defer></script>
+  <script src="js/menu.js?v=<?php echo time(); ?>" defer></script>
 </head>
 <body>
   <section class="app">
