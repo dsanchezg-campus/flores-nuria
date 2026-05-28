@@ -44,19 +44,16 @@ class Empleado extends Cliente{
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
-            $_SESSION['empleado_id'] = $usuario['id_empleado'];
-            $_SESSION['empleado_nombre'] = $usuario['nombre'];
-            $_SESSION['empleado_correo'] = $usuario['correo'];
-            $_SESSION['empleado_puesto'] = $usuario['puesto'];
 
             // Crear sesión con objeto Usuario
-            return new Empleado(
+            $_SESSION['empleado'] = new Empleado(
                 $usuario['id_empleado'],
                 $usuario['nombre'],
                 $usuario['puesto'],
                 $usuario['telefono'],
                 $usuario['correo']
             );
+            return true;
         } else {
             return null; // Contraseña incorrecta
         }
@@ -66,7 +63,7 @@ class Empleado extends Cliente{
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        return isset($_SESSION['empleado_id']);
+        return isset($_SESSION['empleado']);
     }
 
     public static function logout(){

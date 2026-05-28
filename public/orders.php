@@ -73,7 +73,6 @@
             if (strtolower($estado) === 'pendiente') $estadoStr = "<span class='text-warning fw-bold'>$estado</span>";
             
             echo "<tr>";
-            echo "<td>#{$id}</td>";
             echo "<td>{$proveedorId}</td>";
             echo "<td>{$fecha}</td>";
             echo "<td>{$estadoStr}</td>";

@@ -20,7 +20,6 @@
       <table class="table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nombre</th>
             <th>Oferta</th>
             <th>Precio Base</th>
@@ -62,10 +61,9 @@
             $jsNombre = htmlspecialchars(json_encode($producto->getNombre()));
             
             echo "<tr>";
-            echo "<td>{$id}</td>";
             echo "<td>{$nombre}</td>";
             ?>
-            <td> . <?php if($ofertaActiva == true){ echo $ofertaInfo; } else{ echo "Sin oferta"; } ?> </td>
+            <td><?php if(isset($ofertaActiva) && $ofertaActiva->esActiva()){ echo $ofertaInfo; } else{ echo "Sin oferta"; } ?> </td>
           <?php
             echo "<td>" . number_format($precio_raw, 2) . " €</td>";
             echo "<td>" . number_format($iva, 2) . " %</td>";

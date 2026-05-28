@@ -14,25 +14,35 @@
     <?php echo $mensaje; ?>
     
     <?php
-    $pedidos = Pedido::getPedidos();
+    $productos = Producto::getProductos();
+    $clientes = Cliente::getClientes();
     ?>
 
     <section class="form">
       <form method="POST" action="php/actions/payment_action.php">
         <input type="hidden" name="action" value="create_payment">
         <section class="row">
+
           <section class="flex-2">
-            <label>Pedido *</label>
-            <select name="pedido_id" required>
-              <option value="">-- Seleccionar Pedido --</option>
-              <?php foreach($pedidos as $p): ?>
-                <option value="<?= htmlspecialchars($p->getIdPedido(), ENT_QUOTES, 'UTF-8') ?>">#<?= htmlspecialchars($p->getIdPedido(), ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($p->getFechaCreacion(), ENT_QUOTES, 'UTF-8') ?> - <?= number_format($p->getTotalPedido(), 2) ?>€</option>
+            <label>Producto *</label>
+            <input type="text" id="search-create-prod" placeholder="Buscar producto..." onkeyup="filterProducts('create')" class="flex-1 px-3-py-1 border-base rounded-sm" style="max-width: 300px;">
+            <select name="pedido_id" id="select-create-prod" required>
+              <option value="">-- Seleccionar Producto --</option>
+              <?php foreach($productos as $p): ?>
+                <option value="<?= htmlspecialchars($p->getIdProducto(), ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($p->getNombre(), ENT_QUOTES, 'UTF-8') ?> - <?= $p->getStock() ?></option>
               <?php endforeach; ?>
             </select>
           </section>
+
           <section class="flex-2">
             <label>Cliente</label>
-            <input type="text" name="cliente" placeholder="Nombre del cliente">
+            <input type="text" id="search-client" name="cliente" placeholder="Nombre del cliente" onkeyup="filterSelect('client')" >
+              <select name="cliente_id" id="select-client" required>
+                  <option value="">-- Seleccionar Cliente --</option>
+                  <?php foreach($clientes as $c): ?>
+                  <option value="<?= htmlspecialchars($c->getIdCliente(), ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($c->getNombre(), ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($c->getCorreo()) ?? "" ?></option>
+                  <?php endforeach; ?>
+              </select>
           </section>
           <section class="flex-1">
             <label>Monto (€) *</label>

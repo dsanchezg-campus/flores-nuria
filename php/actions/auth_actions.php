@@ -9,8 +9,8 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     
     if (!empty($correo) && !empty($password)) {
-        $empleado = Empleado::InicioSesion($correo, $password);
-        if ($empleado) {
+
+        if (Empleado::InicioSesion($correo, $password)) {
             header("Location: ../../index.php");
             exit;
         } else {

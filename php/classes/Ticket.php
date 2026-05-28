@@ -166,25 +166,28 @@ class Ticket
     /**
      * NUEVO METODO: Recibe un JSON, lo decodifica y devuelve una instancia de Ticket
      */
-    public static function api_decode(string $jsonString): ?self
+    public static function ticket_api_decode(string $jsonString)
     {
-        $data = json_decode($jsonString, true);
+        $ticket = json_decode($jsonString, true);
 
         // Si el JSON es inválido, retornamos null
-        if (!$data) {
+        if (!$ticket) {
             return null;
         }
-
-        // Retornamos la nueva instancia mapeando las claves del JSON
-        return new self(
-            $data['idTicket'] ?? null,
-            $data['empleado'] ?? null,
-            $data['cliente'] ?? null,
-            $data['fechaCreacion'] ?? null,
-            $data['totalVenta'] ?? null,
-            $data['num_ticket'] ?? null,
-            $data['BolsaCompra'] ?? null
-        );
+        $tickets = array();
+        foreach ($ticket as $data) {
+            // Retornamos la nueva instancia mapeando las claves del JSON
+            $tickets[] = new self(
+                $data['idTicket'] ?? null,
+                $data['empleado'] ?? null,
+                $data['cliente'] ?? null,
+                $data['fechaCreacion'] ?? null,
+                $data['totalVenta'] ?? null,
+                $data['num_ticket'] ?? null,
+                $data['BolsaCompra'] ?? null
+            );
+        }
+        return $tickets;
     }
 
     // Crear json de los tikets con sus productos
@@ -196,5 +199,10 @@ class Ticket
             $json[] = $tiket->api_info_data();
         }
         return json_encode($json);
+    }
+
+    public static function getTicketFromApi($jsonString) {
+
+
     }
 }

@@ -126,7 +126,6 @@
       <table class="table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nombre</th>
             <th>Descuento</th>
             <th>Producto</th>
@@ -164,7 +163,6 @@
             $jsActiva = $activaDb ? 'true' : 'false';
             
             echo "<tr>";
-            echo "<td>{$id}</td>";
             echo "<td>{$nombre}</td>";
             echo "<td>{$descuento}</td>";
             echo "<td>{$producto}</td>";

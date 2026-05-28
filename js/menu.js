@@ -91,7 +91,31 @@ function editSupplier(id, nombre, direccion, telefono, correo) {
     
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+function filterSelect(type) {
+    let searchValue = document.getElementById('search-' + type).value.toLowerCase();
+    let selectElement = document.getElementById('select-' + type);
+    let options = selectElement.options;
 
+    for (let i = 0; i < options.length; i++) {
+        let option = options[i];
+        let text = option.text.toLowerCase();
+
+        // Si es la opción por defecto ("-- Seleccionar --"), la dejamos siempre visible
+        if (option.value === "") {
+            option.hidden = false;
+            continue;
+        }
+
+        // Usamos hidden en lugar de style display para mejor compatibilidad
+        if (text.includes(searchValue)) {
+            option.hidden = false;
+            option.style.display = ""; // Por si acaso para navegadores viejos
+        } else {
+            option.hidden = true;
+            option.style.display = "none";
+        }
+    }
+}
 function deleteSupplier(id) {
     if (confirm("¿Estás seguro de que quieres eliminar este proveedor? Esta acción no se puede deshacer.")) {
         document.getElementById('delete-id').value = id;
@@ -174,10 +198,10 @@ function addProductoRow() {
 
 // --- Ofertas ---
 function filterProducts(type) {
-    const search = document.getElementById('search-' + type + '-prod').value.toLowerCase();
-    const select = document.getElementById('select-' + type + '-prod');
+    let search = document.getElementById('search-' + type + '-prod').value.toLowerCase();
+    let select = document.getElementById('select-' + type + '-prod');
     for (let i = 0; i < select.options.length; i++) {
-        const txt = select.options[i].text.toLowerCase();
+        let txt = select.options[i].text.toLowerCase();
         select.options[i].style.display = txt.includes(search) ? '' : 'none';
     }
 }

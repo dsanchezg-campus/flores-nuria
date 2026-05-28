@@ -35,4 +35,15 @@ class Cliente extends Persona
         return new Cliente($row->id_cliente, $row->nombre, $row->telefono, $row->correo);
     }
 
+    public static function getClientes(){
+        $conn = BD::FloresNuria();
+        $stmt = $conn->prepare("SELECT * FROM cliente");
+        $stmt->execute();
+        $clientes = array();
+        while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $clientes[] = new Cliente($row->id_cliente, $row->nombre, $row->telefono, $row->correo);
+        }
+        return $clientes;
+    }
+
 }
