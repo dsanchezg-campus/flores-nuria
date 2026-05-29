@@ -5,9 +5,5 @@ spl_autoload_register(function ($nombre_clase) {
 
     if (file_exists($archivo)) {
         require_once $archivo;
-    } else{
-        error_log("Error: No se pudo encontrar el archivo en $archivo", 3, "logs/errores.log");
-        echo "Error: 505";
-        exit;
     }
 });
