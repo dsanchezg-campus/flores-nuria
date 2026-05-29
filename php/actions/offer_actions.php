@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../clases.php';
+require_once __DIR__ . '/../../autoloader.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
